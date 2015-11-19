@@ -35,11 +35,27 @@ class WPNUXAbstractCreationViewController: UIViewController
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide", name: UIKeyboardDidHideNotification, object: nil)
     }
     
+    func configureView() {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.view.backgroundColor = WPStyleGuide.wordPressBlue()
+        self.addTapGestureRecognizer()
+    }
+    
+    func addTapGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "backgroundTapGestureAction")
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        self.view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
     func keyboardDidShow(notification: NSNotification) {
         
     }
     
     func keyboardWillHide(notification: NSNotification) {
+        
+    }
+    
+    func backgroundTapGestureAction() {
         
     }
 }
