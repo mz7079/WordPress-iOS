@@ -73,3 +73,9 @@
 #import "WPTableViewHandler.h"
 #import "WPTableViewSectionHeaderFooterView.h"
 #import "WPWebViewController.h"
+
+#import "WPNUXSecondaryButton.h"
+#import "WPNUXHelpBadgeLabel.h"
+#import "WPWalkthroughTextField.h"
+#import "WPNUXMainButton.h"
+
