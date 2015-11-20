@@ -2,6 +2,7 @@ import UIKit
 
 class WPNUXAbstractCreationViewController: UIViewController
 {
+    let siteLeftButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 7.0, bottom: 0.0, right: 15.0)
     let siteTopButtonPaddingPad: UIEdgeInsets = UIEdgeInsets(top: 1.0, left: 0.0, bottom: 0.0, right: 20.0)
     let siteTopButtonPadding: UIEdgeInsets = UIEdgeInsets(top: 1.0, left: 0.0, bottom: 0.0, right: 13.0)
     let siteStatusBarOffset: CGFloat = 20.0
@@ -44,7 +45,6 @@ class WPNUXAbstractCreationViewController: UIViewController
         super.viewDidLoad()
         registerForKeyboardNotifications()
         configureViews()
-        addViews()
         layoutViews()
     }
     
@@ -57,7 +57,8 @@ class WPNUXAbstractCreationViewController: UIViewController
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = WPStyleGuide.wordPressBlue()
         addTapGestureRecognizer()
-        configureHelpButton()
+        configureAndAddHelpButton()
+        configureAndAddLeftBarButton()
     }
     
     func addTapGestureRecognizer() {
@@ -66,7 +67,7 @@ class WPNUXAbstractCreationViewController: UIViewController
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    func configureHelpButton() {
+    func configureAndAddHelpButton() {
         let helpButtonImage = UIImage(named: "btn-help")
         helpButton.accessibilityLabel = NSLocalizedString("Help", comment: "Help button")
         helpButton.setImage(helpButtonImage, forState: .Normal)
@@ -75,14 +76,19 @@ class WPNUXAbstractCreationViewController: UIViewController
         helpButton.addTarget(self, action: "helpButtonTapped", forControlEvents: .TouchUpInside)
         helpButton.sizeToFit()
         helpButton.exclusiveTouch = true
-    }
-    
-    func addViews() {
-        addHelpButton()
-    }
-    
-    func addHelpButton() {
+        
         view.addSubview(helpButton)
+    }
+    
+    func configureAndAddLeftBarButton() {
+        leftBarButton.setTitle(NSLocalizedString("Cancel", comment: "Cancel button"), forState: .Normal)
+        leftBarButton.addTarget(self, action: "leftBarButtonTapped", forControlEvents: .TouchUpInside)
+        leftBarButton.exclusiveTouch = true
+        leftBarButton.titleEdgeInsets = siteLeftButtonInsets
+        leftBarButton.sizeToFit()
+        leftBarButton.autoresizingMask = .FlexibleRightMargin
+        
+        view.addSubview(leftBarButton)
     }
     
     func layoutViews() {
@@ -96,7 +102,11 @@ class WPNUXAbstractCreationViewController: UIViewController
         
         x = viewWidth - helpButton.frame.size.width - topButtonPadding.right
         y = siteStatusBarOffset + topButtonPadding.top
-        helpButton.frame = CGRectMake(x, y, helpButton.frame.size.width, helpButton.frame.size.height)
+        helpButton.frame = CGRectMake(x, y, helpButton.frame.width, helpButton.frame.height)
+        
+        x = topButtonPadding.left
+        y = siteStatusBarOffset + siteTopButtonPadding.top
+        leftBarButton.frame = CGRectMake(x, y, leftBarButton.frame.width, leftBarButton.frame.height)
     }
     
     func keyboardDidShow(notification: NSNotification) {
@@ -112,6 +122,10 @@ class WPNUXAbstractCreationViewController: UIViewController
     }
     
     func helpButtonTapped() {
+        
+    }
+    
+    func leftBarButtonTapped() {
         
     }
 }
