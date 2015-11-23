@@ -7,35 +7,13 @@ class WPNUXAbstractCreationViewController: UIViewController
     let siteTopButtonPadding: UIEdgeInsets = UIEdgeInsets(top: 1.0, left: 0.0, bottom: 0.0, right: 13.0)
     let siteStatusBarOffset: CGFloat = 20.0
     
-    var leftBarButton: WPNUXSecondaryButton
-    var helpButton: UIButton
-    var icon: UIImageView
-    var titleLabel: UILabel
-    var textFields: [WPWalkthroughTextField]
-    var mainButton: WPNUXMainButton
-    var mainHelperButton: WPNUXSecondaryButton
-    
-    init() {
-        leftBarButton = WPNUXSecondaryButton()
-        helpButton = UIButton(type: .Custom)
-        icon = UIImageView(image: UIImage(named:"icon-wp"))
-        titleLabel = UILabel()
-        textFields = [WPWalkthroughTextField]()
-        mainButton = WPNUXMainButton()
-        mainHelperButton = WPNUXSecondaryButton()
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        leftBarButton = WPNUXSecondaryButton()
-        helpButton = UIButton(type: .Custom)
-        icon = UIImageView(image: UIImage(named:"icon-wp"))
-        titleLabel = UILabel()
-        textFields = [WPWalkthroughTextField]()
-        mainButton = WPNUXMainButton()
-        mainHelperButton = WPNUXSecondaryButton()
-        super.init(coder: aDecoder)
-    }
+    @IBOutlet weak var leftBarButton: WPNUXSecondaryButton!
+    @IBOutlet weak var helpButton: UIButton!
+    @IBOutlet weak var icon: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var textFields: UIStackView!
+    @IBOutlet weak var mainButton: WPNUXMainButton!
+    @IBOutlet weak var mainHelperButton: WPNUXSecondaryButton!
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
