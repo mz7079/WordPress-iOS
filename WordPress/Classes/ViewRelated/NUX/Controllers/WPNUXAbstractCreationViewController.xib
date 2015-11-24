@@ -22,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n6z-5P-WDu" customClass="WPNUXSecondaryButton">
-                    <rect key="frame" x="8" y="20" width="48" height="30"/>
+                    <rect key="frame" x="0.0" y="20" width="48" height="30"/>
                     <animations/>
                     <state key="normal" title="Cancel">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -31,33 +31,37 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PcZ-Cr-5Sx">
                     <rect key="frame" x="570" y="20" width="22" height="22"/>
                     <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="22" id="MlU-S9-vFf"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="VNN-QP-Yi9"/>
+                    </constraints>
                     <state key="normal" image="btn-help"/>
                 </button>
                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DMG-CP-dqm">
-                    <rect key="frame" x="275" y="234" width="50" height="183"/>
+                    <rect key="frame" x="273" y="232" width="54" height="187"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="icon-wp" translatesAutoresizingMaskIntoConstraints="NO" id="69t-iH-vly">
-                            <rect key="frame" x="0.0" y="0.0" width="50" height="52"/>
+                            <rect key="frame" x="0.0" y="0.0" width="54" height="52"/>
                             <animations/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBQ-TO-XMO">
-                            <rect key="frame" x="0.0" y="52" width="50" height="21"/>
+                            <rect key="frame" x="0.0" y="52" width="54" height="21"/>
                             <animations/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Xmj-DV-EIb">
-                            <rect key="frame" x="0.0" y="73" width="50" height="50"/>
+                            <rect key="frame" x="0.0" y="73" width="54" height="50"/>
                             <animations/>
                         </stackView>
-                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VPE-C3-NuX" customClass="WPNUXPrimaryButton">
-                            <rect key="frame" x="0.0" y="123" width="50" height="30"/>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VPE-C3-NuX" customClass="WPNUXPrimaryButton">
+                            <rect key="frame" x="0.0" y="123" width="54" height="34"/>
                             <animations/>
                             <state key="normal" title="Button"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mtp-p9-DIY" customClass="WPNUXSecondaryButton">
-                            <rect key="frame" x="0.0" y="153" width="50" height="30"/>
+                            <rect key="frame" x="0.0" y="157" width="54" height="30"/>
                             <animations/>
                             <state key="normal" title="Button"/>
                         </button>
@@ -68,10 +72,10 @@
             <animations/>
             <color key="backgroundColor" red="0.0" green="0.52941176469999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="n6z-5P-WDu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="CqI-nd-7sY"/>
                 <constraint firstItem="DMG-CP-dqm" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Fqh-Mv-MgX"/>
                 <constraint firstItem="PcZ-Cr-5Sx" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="Wq8-yX-mL2"/>
                 <constraint firstItem="DMG-CP-dqm" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="XoO-zU-5mk"/>
-                <constraint firstItem="n6z-5P-WDu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="YAb-lS-ruN"/>
                 <constraint firstAttribute="trailing" secondItem="PcZ-Cr-5Sx" secondAttribute="trailing" constant="8" id="adm-0V-htn"/>
                 <constraint firstItem="n6z-5P-WDu" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="pUl-Cv-dmu"/>
             </constraints>
