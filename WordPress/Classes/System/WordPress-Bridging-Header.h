@@ -78,4 +78,4 @@
 #import "WPNUXHelpBadgeLabel.h"
 #import "WPWalkthroughTextField.h"
 #import "WPNUXMainButton.h"
-
+#import "WPNUXUtility.h"
