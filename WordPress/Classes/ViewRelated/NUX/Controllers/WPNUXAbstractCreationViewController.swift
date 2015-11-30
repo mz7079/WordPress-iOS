@@ -34,11 +34,16 @@ class WPNUXAbstractCreationViewController: UIViewController
     }
     
     func keyboardDidShow(notification: NSNotification) {
+        let info: NSDictionary = notification.userInfo!
+        let keyboardHeight = info.objectForKey(UIKeyboardFrameEndUserInfoKey)?.CGRectValue().size.height
         
+        self.view.contentInset.bottom = keyboardHeight!
+        self.view.scrollIndicatorInsets.bottom = keyboardHeight!
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        
+        let contentInsets = postTextView.contentInset
+        self.view.contentInset = UIEdgeInsetsMake(contentInsets.top, contentInsets.left, zeroPadding, contentInsets.right)
     }
     
     func backgroundTapGestureAction() {
