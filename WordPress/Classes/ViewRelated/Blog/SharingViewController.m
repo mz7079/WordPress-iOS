@@ -4,10 +4,10 @@
 #import "SharingDetailViewController.h"
 #import "SVProgressHUD.h"
 #import "UIActionSheet+Helpers.h"
-#import "UIImageView+AFNetworkingExtra.h"
 #import "WPTableViewCell.h"
-#import "WPTableViewSectionHeaderFooterView.h"
 #import "WordPress-Swift.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
+#import <WordPressShared/WPTableViewSectionHeaderFooterView.h>
 
 typedef NS_ENUM(NSInteger, SharingSection){
     SharingPublicizeConnections = 0,

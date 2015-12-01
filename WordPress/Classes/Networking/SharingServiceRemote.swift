@@ -1,4 +1,7 @@
 import Foundation
+import AFNetworking
+import NSObject_SafeExpectations
+
 
 /**
  SharingServiceRemote is responsible for wrangling the REST API calls related to 
@@ -55,7 +58,7 @@ public class SharingServiceRemote : ServiceRemoteREST
                 onSuccess(publicizeServices)
 
             },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            failure: { (operation: AFHTTPRequestOperation?, error: NSError) -> Void in
                 failure?(error)
             })
     }
@@ -103,7 +106,7 @@ public class SharingServiceRemote : ServiceRemoteREST
 
                 onSuccess(keyringConnections)
             },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            failure: { (operation: AFHTTPRequestOperation?, error: NSError) -> Void in
                 failure?(error)
         })
     }
@@ -136,7 +139,7 @@ public class SharingServiceRemote : ServiceRemoteREST
 
                 onSuccess(publicizeConnections)
             },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            failure: { (operation: AFHTTPRequestOperation?, error: NSError) -> Void in
                 failure?(error)
         })
     }
@@ -178,7 +181,7 @@ public class SharingServiceRemote : ServiceRemoteREST
 
                     onSuccess(conn)
                 },
-                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                failure: { (operation: AFHTTPRequestOperation?, error: NSError) -> Void in
                     failure?(error)
             })
     }
@@ -201,7 +204,7 @@ public class SharingServiceRemote : ServiceRemoteREST
             success: { (operation:AFHTTPRequestOperation!, response:AnyObject!) -> Void in
                 success?()
             },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            failure: { (operation: AFHTTPRequestOperation?, error: NSError) -> Void in
                 failure?(error)
         })
     }

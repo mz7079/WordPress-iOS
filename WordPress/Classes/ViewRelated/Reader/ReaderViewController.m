@@ -1,6 +1,6 @@
 #import "ReaderViewController.h"
 
-#import <WordPress-iOS-Shared/WPStyleGuide.h>
+#import <WordPressShared/WPStyleGuide.h>
 
 #import "AccountService.h"
 #import "ContextManager.h"
@@ -9,6 +9,7 @@
 #import "ReaderPostDetailViewController.h"
 #import "ReaderSubscriptionViewController.h"
 #import "ReaderTopicService.h"
+#import "WordPressAppDelegate.h"
 #import "WPTabBarController.h"
 #import "WordPress-Swift.h"
 
@@ -129,6 +130,10 @@
 
 - (void)syncTopics
 {
+    if ([WordPressAppDelegate sharedInstance].testSuiteIsRunning) {
+        // Skip syncing when running the test suite.
+        return;
+    }
     __weak __typeof(self) weakSelf = self;
     ReaderTopicService *topicService = [[ReaderTopicService alloc] initWithManagedObjectContext:[self managedObjectContext]];
     [topicService fetchReaderMenuWithSuccess:^{
