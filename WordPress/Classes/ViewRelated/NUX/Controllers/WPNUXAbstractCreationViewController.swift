@@ -15,12 +15,13 @@ class WPNUXAbstractCreationViewController: UIViewController
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         registerForKeyboardNotifications()
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = WPStyleGuide.wordPressBlue()
-        addTapGestureRecognizer()
     }
     
     func registerForKeyboardNotifications() {
@@ -28,10 +29,8 @@ class WPNUXAbstractCreationViewController: UIViewController
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide", name: UIKeyboardDidHideNotification, object: nil)
     }
     
-    func addTapGestureRecognizer() {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "backgroundTapGestureAction")
-        tapGestureRecognizer.numberOfTapsRequired = 1
-        view.addGestureRecognizer(tapGestureRecognizer)
+    @IBAction func scrollViewTapped(sender: AnyObject) {
+        self.view.endEditing(true)
     }
     
     @IBAction func dismissButtonTapped(sender: AnyObject) {
@@ -57,9 +56,5 @@ class WPNUXAbstractCreationViewController: UIViewController
     func keyboardWillHide(notification: NSNotification) {
         let contentInsets = scrollView.contentInset
         self.scrollView.contentInset = UIEdgeInsetsMake(contentInsets.top, contentInsets.left, 0.0, contentInsets.right)
-    }
-    
-    func backgroundTapGestureAction() {
-        keyboardWillHide(NSNotification())
     }
 }
