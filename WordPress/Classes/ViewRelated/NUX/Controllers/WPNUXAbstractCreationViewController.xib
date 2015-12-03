@@ -40,6 +40,9 @@
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="VNN-QP-Yi9"/>
                     </constraints>
                     <state key="normal" image="btn-help"/>
+                    <connections>
+                        <action selector="helpButtonTapped:" destination="-1" eventType="touchUpInside" id="Ym9-7X-fba"/>
+                    </connections>
                 </button>
                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DMG-CP-dqm">
                     <rect key="frame" x="273" y="232" width="54" height="187"/>

@@ -38,6 +38,14 @@ class WPNUXAbstractCreationViewController: UIViewController
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    @IBAction func helpButtonTapped(sender: AnyObject) {
+        let supportViewController = SupportViewController()
+        let supportNavigationController = UINavigationController(rootViewController: supportViewController)
+        supportNavigationController.navigationBar.translucent = false
+        supportNavigationController.modalPresentationStyle = .FormSheet
+        self.navigationController?.presentViewController(supportNavigationController, animated: true, completion: nil)
+    }
+    
     func keyboardDidShow(notification: NSNotification) {
         let info: NSDictionary = notification.userInfo!
         let keyboardHeight = info.objectForKey(UIKeyboardFrameEndUserInfoKey)?.CGRectValue.size.height

@@ -79,3 +79,4 @@
 #import "WPWalkthroughTextField.h"
 #import "WPNUXMainButton.h"
 #import "WPNUXUtility.h"
+#import "SupportViewController.h"
