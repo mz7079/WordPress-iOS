@@ -2,6 +2,7 @@ import UIKit
 
 class WPNUXAbstractCreationViewController: UIViewController
 {
+    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var dismissButton: WPNUXSecondaryButton!
     @IBOutlet weak var helpButton: UIButton!
     @IBOutlet weak var icon: UIImageView!
@@ -33,20 +34,24 @@ class WPNUXAbstractCreationViewController: UIViewController
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    @IBAction func dismissButtonTapped(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func keyboardDidShow(notification: NSNotification) {
         let info: NSDictionary = notification.userInfo!
-        let keyboardHeight = info.objectForKey(UIKeyboardFrameEndUserInfoKey)?.CGRectValue().size.height
+        let keyboardHeight = info.objectForKey(UIKeyboardFrameEndUserInfoKey)?.CGRectValue.size.height
         
-        self.view.contentInset.bottom = keyboardHeight!
-        self.view.scrollIndicatorInsets.bottom = keyboardHeight!
+        self.scrollView.contentInset.bottom = keyboardHeight!
+        self.scrollView.scrollIndicatorInsets.bottom = keyboardHeight!
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        let contentInsets = postTextView.contentInset
-        self.view.contentInset = UIEdgeInsetsMake(contentInsets.top, contentInsets.left, zeroPadding, contentInsets.right)
+        let contentInsets = scrollView.contentInset
+        self.scrollView.contentInset = UIEdgeInsetsMake(contentInsets.top, contentInsets.left, 0.0, contentInsets.right)
     }
     
     func backgroundTapGestureAction() {
-        
+        keyboardWillHide(NSNotification())
     }
 }
