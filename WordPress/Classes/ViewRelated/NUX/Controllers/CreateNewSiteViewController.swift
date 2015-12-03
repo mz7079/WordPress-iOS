@@ -3,6 +3,7 @@ import UIKit
 class CreateNewSiteViewController: WPNUXAbstractCreationViewController
 {
     override func viewDidLoad() {
+        super.viewDidLoad()
         icon.hidden = true
         mainHelperButton.hidden = true
     }
