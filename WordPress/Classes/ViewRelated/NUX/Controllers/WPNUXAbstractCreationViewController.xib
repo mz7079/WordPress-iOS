@@ -21,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n6z-5P-WDu" customClass="WPNUXSecondaryButton">
-                    <rect key="frame" x="0.0" y="20" width="48" height="30"/>
+                    <rect key="frame" x="0.0" y="24" width="48" height="30"/>
                     <animations/>
                     <state key="normal" title="Cancel">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -71,7 +71,7 @@
                     </constraints>
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bDR-67-FIl">
-                    <rect key="frame" x="570" y="24" width="22" height="22"/>
+                    <rect key="frame" x="558" y="32" width="22" height="22"/>
                     <animations/>
                     <constraints>
                         <constraint firstAttribute="height" constant="22" id="cOi-o6-8gf"/>
@@ -89,12 +89,12 @@
             <constraints>
                 <constraint firstItem="DMG-CP-dqm" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="232" id="0vK-WU-BCW"/>
                 <constraint firstItem="DMG-CP-dqm" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="7XN-wC-w0Y"/>
-                <constraint firstAttribute="trailing" secondItem="bDR-67-FIl" secondAttribute="trailing" constant="8" id="BFh-Vy-pzM"/>
+                <constraint firstAttribute="trailing" secondItem="bDR-67-FIl" secondAttribute="trailing" constant="20" id="BFh-Vy-pzM"/>
                 <constraint firstItem="n6z-5P-WDu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="CqI-nd-7sY"/>
                 <constraint firstItem="DMG-CP-dqm" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Fqh-Mv-MgX"/>
                 <constraint firstItem="DMG-CP-dqm" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="XoO-zU-5mk"/>
-                <constraint firstItem="n6z-5P-WDu" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="pUl-Cv-dmu"/>
-                <constraint firstItem="bDR-67-FIl" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="24" id="wO7-AM-aD6"/>
+                <constraint firstItem="n6z-5P-WDu" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="24" id="pUl-Cv-dmu"/>
+                <constraint firstItem="bDR-67-FIl" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="32" id="wO7-AM-aD6"/>
             </constraints>
             <connections>
                 <outletCollection property="gestureRecognizers" destination="8L0-Uz-6NW" appends="YES" id="qc0-dO-vRq"/>
