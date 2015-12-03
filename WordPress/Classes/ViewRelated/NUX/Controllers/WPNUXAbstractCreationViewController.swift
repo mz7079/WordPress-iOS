@@ -2,7 +2,6 @@ import UIKit
 
 class WPNUXAbstractCreationViewController: UIViewController
 {
-    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var dismissButton: WPNUXSecondaryButton!
     @IBOutlet weak var helpButton: UIButton!
     @IBOutlet weak var icon: UIImageView!
@@ -14,8 +13,6 @@ class WPNUXAbstractCreationViewController: UIViewController
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,15 +43,8 @@ class WPNUXAbstractCreationViewController: UIViewController
     }
     
     func keyboardDidShow(notification: NSNotification) {
-        let info: NSDictionary = notification.userInfo!
-        let keyboardHeight = info.objectForKey(UIKeyboardFrameEndUserInfoKey)?.CGRectValue.size.height
-        
-        self.scrollView.contentInset.bottom = keyboardHeight!
-        self.scrollView.scrollIndicatorInsets.bottom = keyboardHeight!
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        let contentInsets = scrollView.contentInset
-        self.scrollView.contentInset = UIEdgeInsetsMake(contentInsets.top, contentInsets.left, 0.0, contentInsets.right)
     }
 }
