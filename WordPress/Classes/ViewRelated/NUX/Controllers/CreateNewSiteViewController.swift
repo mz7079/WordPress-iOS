@@ -3,17 +3,34 @@ import UIKit
 class CreateNewSiteViewController: WPNUXAbstractCreationViewController
 {
     override func viewDidLoad() {
-        super.viewDidLoad()
         icon.hidden = true
-        let titleAttributes: [String : AnyObject] = WPNUXUtility.titleAttributesWithColor(UIColor.whiteColor()) as! [String : AnyObject]
-        titleLabel.attributedText = NSAttributedString(string: NSLocalizedString("Create a new WordPress.com site", comment: "Create a new WordPress.com site title"), attributes: titleAttributes)
-        addTextFields()
+        mainHelperButton.hidden = true
     }
     
-    func addTextFields() {
-        let emailField = WPWalkthroughTextField(leftViewImage: UIImage(named: "icon-email-field"))
-        emailField.backgroundColor = UIColor.whiteColor()
-        textFields.addArrangedSubview(emailField)
-
+    override func titleLabelString() -> String {
+        return NSLocalizedString("Create a new WordPress.com site", comment: "Create a new WordPress.com site title")
+    }
+    
+    override func allTextFields() -> [WPWalkthroughTextField] {
+        var textFieldsArray = [WPWalkthroughTextField]()
+        
+        let siteTitleField = WPWalkthroughTextField(leftViewImage: UIImage(named: "icon-pencil"))
+        siteTitleField.backgroundColor = UIColor.whiteColor()
+        siteTitleField.placeholder = NSLocalizedString("Title", comment: "Title field")
+        siteTitleField.font = WPNUXUtility.textFieldFont()
+        siteTitleField.adjustsFontSizeToFitWidth = true
+        siteTitleField.delegate = self
+        siteTitleField.autocorrectionType = .No
+        siteTitleField.autocapitalizationType = .None
+        siteTitleField.accessibilityLabel = NSLocalizedString("Title", comment: "Title field")
+        siteTitleField.returnKeyType = .Next
+        
+        textFieldsArray.append(siteTitleField)
+        
+        return textFieldsArray
+    }
+    
+    override func mainButtonString() -> String {
+        return NSLocalizedString("Create Account", comment: "Create account button")
     }
 }

@@ -1,6 +1,6 @@
 import UIKit
 
-class WPNUXAbstractCreationViewController: UIViewController
+public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldDelegate
 {
     @IBOutlet weak var dismissButton: WPNUXSecondaryButton!
     @IBOutlet weak var helpButton: UIButton!
@@ -14,11 +14,14 @@ class WPNUXAbstractCreationViewController: UIViewController
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         registerForKeyboardNotifications()
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = WPStyleGuide.wordPressBlue()
+        configureTitle()
+        configureTextFields()
+        configureMainButton()
     }
     
     func registerForKeyboardNotifications() {
@@ -47,4 +50,42 @@ class WPNUXAbstractCreationViewController: UIViewController
     
     func keyboardWillHide(notification: NSNotification) {
     }
+    
+    public func titleLabelString() -> String {
+        return String()
+    }
+    
+    public func allTextFields() -> [WPWalkthroughTextField] {
+        return [WPWalkthroughTextField]()
+    }
+    
+    public func mainButtonString() -> String {
+        return String()
+    }
+    
+    public func mainHelperButtonString() -> String {
+        return String()
+    }
+    
+    func configureTitle() {
+        let titleAttributes: [String : AnyObject] = WPNUXUtility.titleAttributesWithColor(UIColor.whiteColor()) as! [String : AnyObject]
+        titleLabel.attributedText = NSAttributedString(string: titleLabelString(), attributes: titleAttributes)
+    }
+    
+    public func configureTextFields() {
+        let textFieldsArray = allTextFields()
+        for textField in textFieldsArray {
+            textField.frame = CGRectMake(0.0, 0.0, 320.0, 44.0)
+            textFields.addArrangedSubview(textField)
+        }
+    }
+    
+    public func configureMainButton() {
+        mainButton.setTitle(mainButtonString(), forState: .Normal)
+    }
+    
+    public func configureMainHelperButton() {
+        mainHelperButton.setTitle(mainHelperButtonString(), forState: .Normal)
+    }
+    
 }
