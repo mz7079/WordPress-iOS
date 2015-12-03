@@ -45,10 +45,10 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
         self.navigationController?.presentViewController(supportNavigationController, animated: true, completion: nil)
     }
     
-    func keyboardDidShow(notification: NSNotification) {
+    func keyboardDidShow() {
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide() {
     }
     
     public func titleLabelString() -> String {
