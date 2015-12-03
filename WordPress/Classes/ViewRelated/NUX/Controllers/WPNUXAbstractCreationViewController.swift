@@ -88,4 +88,8 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
         mainHelperButton.setTitle(mainHelperButtonString(), forState: .Normal)
     }
     
+    
+    public func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
 }
