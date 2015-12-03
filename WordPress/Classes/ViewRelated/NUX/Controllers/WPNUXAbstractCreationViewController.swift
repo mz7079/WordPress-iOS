@@ -89,7 +89,7 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     }
     
     
-    public func preferredStatusBarStyle() -> UIStatusBarStyle {
+    public override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
 }
