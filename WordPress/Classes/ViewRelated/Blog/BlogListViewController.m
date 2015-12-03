@@ -605,6 +605,8 @@ static NSTimeInterval HideAllSitesInterval = 2.0;
     
     CreateNewBlogViewController *createNewBlogViewController = [[CreateNewBlogViewController alloc] init];
     [self.navigationController presentViewController:createNewBlogViewController animated:YES completion:nil];
+    UINavigationController *createNewBlogNavigationController = [[UINavigationController alloc] initWithRootViewController:createNewBlogViewController];
+    [self.navigationController presentViewController:createNewBlogNavigationController animated:YES completion:nil];
 }
 
 - (void)showLoginControllerForAddingSelfHostedSite
