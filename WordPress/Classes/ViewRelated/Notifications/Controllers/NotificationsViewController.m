@@ -72,6 +72,7 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint   *ratingsHeightConstraint;
 @property (nonatomic, strong) WPTableViewHandler            *tableViewHandler;
 @property (nonatomic, strong) WPNoResultsView               *noResultsView;
+@property (nonatomic, strong) UIView                        *tableOverlayView;
 @property (nonatomic, strong) NSString                      *pushNotificationID;
 @property (nonatomic, strong) NSDate                        *pushNotificationDate;
 @property (nonatomic, strong) NSDate                        *lastReloadDate;
@@ -124,6 +125,7 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     [self setupConstraints];
     [self setupTableView];
     [self setupTableHeaderView];
+    [self setupTableOverlayView];
     [self setupTableFooterView];
     [self setupTableHandler];
     [self setupRatingsView];
@@ -226,6 +228,23 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     // Due to iOS awesomeness, unless we re-assign the tableHeaderView, iOS might never refresh the UI
     self.tableView.tableHeaderView = self.tableHeaderView;
     [self.tableView setNeedsLayout];
+}
+
+- (void)setupTableOverlayView
+{
+    UIView *overlay = [UIView new];
+    overlay.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.tableView addSubview:overlay];
+    self.tableOverlayView = overlay;
+    
+    UILayoutGuide *margins = self.tableView.layoutMarginsGuide;
+    NSArray<NSLayoutConstraint *> *constraints = @[
+        [overlay.topAnchor constraintEqualToAnchor:self.tableHeaderView.bottomAnchor],
+        [overlay.bottomAnchor constraintEqualToAnchor:margins.bottomAnchor],
+        [overlay.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
+        [overlay.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
+    ];
+    [NSLayoutConstraint activateConstraints:constraints];
 }
 
 - (void)setupTableFooterView
@@ -888,8 +907,8 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     
     // Attach the view
     WPNoResultsView *noResultsView  = self.noResultsView;
-    if (!noResultsView.superview) {
-        [self.tableView addSubviewWithFadeAnimation:noResultsView];
+    if (![noResultsView isDescendantOfView:self.tableOverlayView]) {
+        [self.tableOverlayView addSubviewWithFadeAnimation:self.noResultsView];
     }
     
     // Refresh its properties: The user may have signed into WordPress.com
