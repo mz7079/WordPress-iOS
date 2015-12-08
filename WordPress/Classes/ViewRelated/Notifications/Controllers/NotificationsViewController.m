@@ -235,6 +235,7 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     UIView *overlay = [UIView new];
     overlay.translatesAutoresizingMaskIntoConstraints = NO;
     [self.tableView addSubview:overlay];
+    overlay.hidden = YES;
     self.tableOverlayView = overlay;
     
     UILayoutGuide *margins = self.tableView.layoutMarginsGuide;
@@ -901,6 +902,7 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
 {
     // Remove If Needed
     if (self.tableViewHandler.resultsController.fetchedObjects.count) {
+        self.tableOverlayView.hidden = YES;
         [self.noResultsView removeFromSuperview];
         return;
     }
@@ -908,6 +910,7 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     // Attach the view
     WPNoResultsView *noResultsView  = self.noResultsView;
     if (![noResultsView isDescendantOfView:self.tableOverlayView]) {
+        self.tableOverlayView.hidden = NO;
         [self.tableOverlayView addSubviewWithFadeAnimation:self.noResultsView];
     }
     
