@@ -175,9 +175,9 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     self.tableViewHandler.updateRowAnimation = UITableViewRowAnimationNone;
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [self.tableViewHandler clearCachedRowHeights];
 }
 
