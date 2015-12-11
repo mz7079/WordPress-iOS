@@ -12,7 +12,7 @@
      struct DestructiveButtonRow: ImmuTableRow {
          static let cell = ImmuTableCell.Class(UITableViewCell.self)
          let title: String
-         let action: ImmuTableActionType?
+         let action: ImmuTableAction?
 
          func configureCell(cell: UITableViewCell) {
              cell.textLabel?.text = title
@@ -144,7 +144,7 @@ public protocol ImmuTableRow {
          }
 
      */
-    var action: ImmuTableActionType? { get }
+    var action: ImmuTableAction? { get }
 
     /// This method is called when an associated cell needs to be configured.
     /// - precondition: You can assume that the passed cell is of the type defined
@@ -304,7 +304,7 @@ public class ImmuTableViewHandler: NSObject, UITableViewDataSource, UITableViewD
 // MARK: - Type aliases
 
 
-public typealias ImmuTableActionType = (ImmuTableRow) -> Void
+public typealias ImmuTableAction = (ImmuTableRow) -> Void
 
 
 // MARK: - Internal testing helpers

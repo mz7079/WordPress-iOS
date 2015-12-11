@@ -58,7 +58,7 @@ struct NavigationItemRow : ImmuTableRow {
     static let cell = ImmuTableCell.Class(WPTableViewCellDefault)
 
     let title: String
-    let action: ImmuTableActionType?
+    let action: ImmuTableAction?
 
     func configureCell(cell: UITableViewCell) {
         cell.textLabel?.text = title
@@ -73,7 +73,7 @@ struct EditableTextRow : ImmuTableRow {
 
     let title: String
     let value: String
-    let action: ImmuTableActionType?
+    let action: ImmuTableAction?
 
     func configureCell(cell: UITableViewCell) {
         cell.textLabel?.text = title
@@ -89,7 +89,7 @@ struct TextRow : ImmuTableRow {
 
     let title: String
     let value: String
-    let action: ImmuTableActionType? = nil
+    let action: ImmuTableAction? = nil
 
     func configureCell(cell: UITableViewCell) {
         cell.textLabel?.text = title
@@ -104,7 +104,7 @@ struct LinkRow : ImmuTableRow {
     static let cell = ImmuTableCell.Class(WPTableViewCellValue1)
 
     let title: String
-    let action: ImmuTableActionType?
+    let action: ImmuTableAction?
 
     func configureCell(cell: UITableViewCell) {
         cell.textLabel?.text = title
@@ -118,7 +118,7 @@ struct LinkWithValueRow : ImmuTableRow {
 
     let title: String
     let value: String
-    let action: ImmuTableActionType?
+    let action: ImmuTableAction?
 
     func configureCell(cell: UITableViewCell) {
         cell.textLabel?.text = title
@@ -133,7 +133,7 @@ struct SwitchRow: ImmuTableRow {
 
     let title: String
     let value: Bool
-    let action: ImmuTableActionType? = nil
+    let action: ImmuTableAction? = nil
     let onChange: Bool -> Void
 
     func configureCell(cell: UITableViewCell) {
@@ -159,7 +159,7 @@ struct MediaSizeRow: ImmuTableRow {
     let value: Int
     let onChange: Int -> Void
 
-    let action: ImmuTableActionType? = nil
+    let action: ImmuTableAction? = nil
 
     func configureCell(cell: UITableViewCell) {
         let cell = cell as! CellType
