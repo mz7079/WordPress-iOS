@@ -9,6 +9,10 @@ extension WPStyleGuide
 
         public static let width = CGFloat(250)
 
+        public static let titleLeading = CGFloat(10)
+        public static let messageLeading = CGFloat(8)
+        public static let buttonLeading = CGFloat(17)
+
         public static let buttonEdge = CGFloat(20)
 
         // MARK: Colors
@@ -28,6 +32,15 @@ extension WPStyleGuide
         public static let buttonFont = WPStyleGuide.regularTextFont()
 
         // MARK: Conveniences
+        
+        public static func spacingView(height: CGFloat) -> UIView {
+            let view = UIView()
+            view.hidden = true
+            let constraint = view.heightAnchor.constraintEqualToConstant(height)
+            constraint.priority = UILayoutPriorityDefaultLow
+            NSLayoutConstraint.activateConstraints([constraint])
+            return view
+        }
 
         public static func attributedTitle(title: String) -> NSAttributedString {
             return NSAttributedString(string: title, attributes: titleAttributes as? [String : AnyObject])
@@ -53,7 +66,7 @@ extension WPStyleGuide
             UIGraphicsBeginImageContextWithOptions(fillRect.size, false, UIScreen.mainScreen().scale)
             let context = UIGraphicsGetCurrentContext()
         
-            CGContextSetStrokeColorWithColor(context, buttonColor.CGColor);
+            CGContextSetStrokeColorWithColor(context, buttonColor.CGColor)
             CGContextAddPath(context, UIBezierPath(roundedRect: CGRectInset(fillRect, 1, 1), cornerRadius: 2).CGPath)
             CGContextStrokePath(context)
         

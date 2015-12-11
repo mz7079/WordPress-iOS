@@ -43,6 +43,7 @@ public class ResultsStatusView: UIStackView
             }
             let message = newValue ?? ""
             messageLabel.hidden = message.isEmpty
+            messageSpacer.hidden = messageLabel.hidden
             messageLabel.text = message
             setNeedsUpdateConstraints()
         }
@@ -58,6 +59,7 @@ public class ResultsStatusView: UIStackView
             }
             let title = newValue ?? ""
             button.hidden = title.isEmpty
+            buttonSpacer.hidden = button.hidden
             button.setTitle(title, forState: .Normal)
             button.sizeToFit()
             setNeedsUpdateConstraints()
@@ -68,11 +70,13 @@ public class ResultsStatusView: UIStackView
         didSet {
             if let remove = oldValue where remove != accessoryView {
                 remove.removeFromSuperview()
+                titleSpacer.hidden = true
             }
             guard let add = accessoryView  else {
                 return
             }
             insertArrangedSubview(add, atIndex: 0)
+            titleSpacer.hidden = false
         }
     }
 
@@ -82,6 +86,8 @@ public class ResultsStatusView: UIStackView
 
     private typealias Style = WPStyleGuide.ResultsStatusView
 
+    private let titleSpacer = Style.spacingView(Style.titleLeading)
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.hidden = true
@@ -89,6 +95,8 @@ public class ResultsStatusView: UIStackView
         return label
     }()
     
+    private let messageSpacer = Style.spacingView(Style.messageLeading)
+
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.hidden = true
@@ -96,6 +104,8 @@ public class ResultsStatusView: UIStackView
         Style.applyMessageStyle(label)
         return label
     }()
+    
+    private let buttonSpacer = Style.spacingView(Style.buttonLeading)
 
     private let button: UIButton = {
         let button = UIButton(type: .Custom)
@@ -137,13 +147,18 @@ public class ResultsStatusView: UIStackView
         spacing = 0
         translatesAutoresizingMaskIntoConstraints = false
         
+        addArrangedSubview(titleSpacer)
         addArrangedSubview(titleLabel)
+        addArrangedSubview(messageSpacer)
         addArrangedSubview(messageLabel)
+        addArrangedSubview(buttonSpacer)
         addArrangedSubview(button)
 
-        widthAnchor.constraintEqualToConstant(Style.width).active = true
-        titleLabel.widthAnchor.constraintEqualToAnchor(widthAnchor).active = true
-        messageLabel.widthAnchor.constraintEqualToAnchor(widthAnchor).active = true
+        NSLayoutConstraint.activateConstraints([
+            widthAnchor.constraintEqualToConstant(Style.width),
+            titleLabel.widthAnchor.constraintEqualToAnchor(widthAnchor),
+            messageLabel.widthAnchor.constraintEqualToAnchor(widthAnchor),
+        ])
 
         button.addTarget(self, action: "didTapButton:", forControlEvents: .TouchUpInside)
     }
@@ -175,8 +190,10 @@ public class ResultsStatusView: UIStackView
             return
         }
         
-        centerXAnchor.constraintEqualToAnchor(margins.centerXAnchor).active = true
-        centerYAnchor.constraintEqualToAnchor(margins.centerYAnchor).active = true
+        NSLayoutConstraint.activateConstraints([
+            centerXAnchor.constraintEqualToAnchor(margins.centerXAnchor),
+            centerYAnchor.constraintEqualToAnchor(margins.centerYAnchor),
+        ])
     }
     
     public override func layoutSubviews() {
