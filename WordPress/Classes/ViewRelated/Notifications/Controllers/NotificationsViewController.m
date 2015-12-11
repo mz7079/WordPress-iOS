@@ -8,7 +8,6 @@
 
 #import "WPTableViewHandler.h"
 #import "WPWebViewController.h"
-#import "WPNoResultsView.h"
 #import "WPTabBarController.h"
 
 #import "Notification.h"
@@ -64,14 +63,14 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
 #pragma mark ====================================================================================
 
 @interface NotificationsViewController () <SPBucketDelegate, WPTableViewHandlerDelegate, ABXPromptViewDelegate,
-                                            ABXFeedbackViewControllerDelegate, WPNoResultsViewDelegate>
+                                            ABXFeedbackViewControllerDelegate, ResultsStatusViewDelegate>
 @property (nonatomic, strong) IBOutlet UIView               *tableHeaderView;
 @property (nonatomic, strong) IBOutlet UISegmentedControl   *filtersSegmentedControl;
 @property (nonatomic, strong) IBOutlet ABXPromptView        *ratingsView;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint   *ratingsTopConstraint;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint   *ratingsHeightConstraint;
 @property (nonatomic, strong) WPTableViewHandler            *tableViewHandler;
-@property (nonatomic, strong) WPNoResultsView               *noResultsView;
+@property (nonatomic, strong) ResultsStatusView             *noResultsView;
 @property (nonatomic, strong) NSString                      *pushNotificationID;
 @property (nonatomic, strong) NSDate                        *pushNotificationDate;
 @property (nonatomic, strong) NSDate                        *lastReloadDate;
@@ -884,10 +883,8 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     }
     
     // Attach the view
-    WPNoResultsView *noResultsView  = self.noResultsView;
-    if (!noResultsView.superview) {
-        [self.tableView addSubviewWithFadeAnimation:noResultsView];
-    }
+    ResultsStatusView *noResultsView  = self.noResultsView;
+    [noResultsView showInView:self.tableView animated: YES];
     
     // Refresh its properties: The user may have signed into WordPress.com
     noResultsView.titleText         = self.noResultsTitleText;
@@ -896,10 +893,10 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     noResultsView.buttonTitle       = self.noResultsButtonText;
 }
 
-- (WPNoResultsView *)noResultsView
+- (ResultsStatusView *)noResultsView
 {
     if (!_noResultsView) {
-        _noResultsView          = [WPNoResultsView new];
+        _noResultsView          = [ResultsStatusView new];
         _noResultsView.delegate = self;
     }
     return _noResultsView;
@@ -947,7 +944,7 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     return showsJetpackMessage;
 }
 
-- (void)didTapNoResultsView:(WPNoResultsView *)noResultsView
+- (void)didTapResultsStatusView:(ResultsStatusView *)sender
 {
     NSURL *targetURL                        = [NSURL URLWithString:WPJetpackInformationURL];
     WPWebViewController *webViewController  = [WPWebViewController webViewControllerWithURL:targetURL];
