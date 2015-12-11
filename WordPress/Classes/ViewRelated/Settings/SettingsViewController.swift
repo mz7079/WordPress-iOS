@@ -5,7 +5,7 @@ import WordPressComAnalytics
 
 typealias ImmuTableRowControllerGenerator = ImmuTableRow -> UIViewController
 
-class SettingsViewController: UITableViewController {
+class AccountSettingsViewController: UITableViewController {
     var account: WPAccount! {
         didSet {
             self.service = AccountSettingsService(userID: account.userID.integerValue, api: account.restApi)
