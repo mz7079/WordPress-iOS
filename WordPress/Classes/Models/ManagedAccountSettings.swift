@@ -103,3 +103,7 @@ enum AccountSettingsChange {
         }
     }
 }
+
+typealias AccountSettingsChangeWithString = String -> AccountSettingsChange
+typealias AccountSettingsChangeWithInt = Int -> AccountSettingsChange
+
