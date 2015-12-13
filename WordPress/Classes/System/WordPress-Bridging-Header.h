@@ -74,5 +74,5 @@
 #import "WPNUXHelpBadgeLabel.h"
 #import "WPWalkthroughTextField.h"
 #import "WPNUXMainButton.h"
-#import "WPNUXUtility.h"
+#import <WordPressShared/WPNUXUtility.h>
 #import "SupportViewController.h"
