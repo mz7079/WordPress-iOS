@@ -29,9 +29,9 @@
 
 #import "AppRatingUtility.h"
 
-#import <WordPress-AppbotX/ABXPromptView.h>
-#import <WordPress-AppbotX/ABXAppStore.h>
-#import <WordPress-AppbotX/ABXFeedbackViewController.h>
+#import <WordPress_AppbotX/ABXPromptView.h>
+#import <WordPress_AppbotX/ABXAppStore.h>
+#import <WordPress_AppbotX/ABXFeedbackViewController.h>
 
 #import "WordPress-Swift.h"
 
@@ -437,9 +437,6 @@ typedef NS_ENUM(NSUInteger, NotificationFilter)
     
     if (notification) {
         DDLogInfo(@"Pushing Notification Details for: [%@]", notificationID);
-        
-        NSDictionary *properties = notification.type ? @{ @"type" : notification.type } : nil;
-        [WPAnalytics track:WPAnalyticsStatPushNotificationAlertPressed withProperties:properties];
         
         [self showDetailsForNotification:notification];
     } else {
