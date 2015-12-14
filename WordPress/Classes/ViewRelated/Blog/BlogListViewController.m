@@ -605,11 +605,9 @@ static NSTimeInterval HideAllSitesInterval = 2.0;
 - (void)showAddNewWordPressController
 {
     [self setEditing:NO animated:NO];
-    
-    CreateNewBlogViewController *createNewBlogViewController = [[CreateNewBlogViewController alloc] init];
-    [self.navigationController presentViewController:createNewBlogViewController animated:YES completion:nil];
-    UINavigationController *createNewBlogNavigationController = [[UINavigationController alloc] initWithRootViewController:createNewBlogViewController];
-    [self.navigationController presentViewController:createNewBlogNavigationController animated:YES completion:nil];
+
+    CreateNewSiteViewController *createNewSiteViewController = [[CreateNewSiteViewController alloc] initWithNibName:@"WPNUXAbstractCreationViewController" bundle:nil];
+    [self.navigationController presentViewController:createNewSiteViewController animated:YES completion:nil];
 }
 
 - (void)showLoginControllerForAddingSelfHostedSite
