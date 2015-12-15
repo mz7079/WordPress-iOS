@@ -12,13 +12,7 @@ class AccountSettingsViewController: UITableViewController {
         }
     }
 
-    var service: AccountSettingsService! {
-        didSet {
-            subscribeSettings()
-        }
-    }
-
-    var settingsSubscription: AccountSettingsSubscription?
+    var service: AccountSettingsService!
 
     var handler: ImmuTableViewHandler!
 
@@ -43,18 +37,6 @@ class AccountSettingsViewController: UITableViewController {
         WPStyleGuide.configureColorsForView(view, andTableView: tableView)
 
         service.refreshSettings({ _ in })
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        if settingsSubscription == nil {
-            subscribeSettings()
-        }
-    }
-
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        unsubscribeSettings()
     }
 
     func buildViewModel(settings: AccountSettings?) {
@@ -105,20 +87,6 @@ class AccountSettingsViewController: UITableViewController {
                 ],
                 footerText: nil)
             ])
-    }
-
-    func subscribeSettings() {
-        settingsSubscription = service.subscribeSettings({
-            [unowned self]
-            (settings) -> Void in
-
-            DDLogSwift.logDebug("Got settings \(settings)")
-            self.buildViewModel(settings)
-        })
-    }
-
-    func unsubscribeSettings() {
-        settingsSubscription = nil
     }
 
     func editEmail() -> ImmuTableRowControllerGenerator {
