@@ -41,6 +41,7 @@ target 'WordPress', :exclusive => true do
   pod 'ReactiveCocoa', '~> 2.4.7'
   pod 'FormatterKit', '~> 1.8.0'
   pod 'RxSwift', '2.0.0-beta.4'
+  pod 'RxCocoa', '2.0.0-beta.4'
 end
 
 target 'WordPressTodayWidget', :exclusive => true do

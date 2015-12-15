@@ -136,6 +136,8 @@ PODS:
   - ReactiveCocoa/no-arc (2.4.7)
   - ReactiveCocoa/UI (2.4.7):
     - ReactiveCocoa/Core
+  - RxCocoa (2.0.0-beta.4):
+    - RxSwift (~> 2.0.0-beta)
   - RxSwift (2.0.0-beta.4)
   - Simperium (0.8.9):
     - Simperium/DiffMatchPach (= 0.8.9)
@@ -216,6 +218,7 @@ DEPENDENCIES:
   - OHHTTPStubs/Swift (~> 4.6.0)
   - Reachability (= 3.2)
   - ReactiveCocoa (~> 2.4.7)
+  - RxCocoa (= 2.0.0-beta.4)
   - RxSwift (= 2.0.0-beta.4)
   - Simperium (= 0.8.9)
   - Specta (= 1.0.5)
@@ -288,6 +291,7 @@ SPEC CHECKSUMS:
   PDKTZipArchive: 81c4824eb5587131e422fc58b92c043c4aa96466
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   ReactiveCocoa: eb38dee0a0e698f73a9b25e5c1faea2bb4c79240
+  RxCocoa: 4a3e433e6dfe116362ff54423c841cc0f209e009
   RxSwift: 191c6b06da783a8671433cf35a54d2ad2fd2d9de
   Simperium: 6c3b944c7d72477d83b3355331b8fa879b35afb2
   Specta: ac94d110b865115fe60ff2c6d7281053c6f8e8a2
