@@ -9,6 +9,16 @@ protocol MyProfilePresenter: AnyObject {
     func push<T>(controllerGenerator: T -> UIViewController) -> T -> Void
 }
 
+extension MyProfilePresenter where Self: UIViewController {
+    func push<T>(controllerGenerator: T -> UIViewController) -> T -> Void {
+        return {
+            [unowned self] in
+            let controller = controllerGenerator($0)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
+}
+
 protocol MyProfileDelegate: MyProfileViewModelObserver, MyProfilePresenter {}
 
 struct MyProfileViewModel {
@@ -168,13 +178,5 @@ class MyProfileViewController: UITableViewController, MyProfileDelegate {
     func viewModelChanged(viewModel: MyProfileViewModel) {
         title = viewModel.title
         handler.viewModel = viewModel.tableViewModel
-    }
-
-    func push<T>(controllerGenerator: T -> UIViewController) -> T -> Void {
-        return {
-            [unowned self] in
-            let controller = controllerGenerator($0)
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
     }
 }
