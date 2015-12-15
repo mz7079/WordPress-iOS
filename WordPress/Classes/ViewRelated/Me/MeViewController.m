@@ -411,8 +411,7 @@ static NSString *const MVCCellReuseIdentifier = @"MVCCellReuseIdentifier";
 {
     [WPAnalytics track:WPAnalyticsStatOpenedAccountSettings];
 
-    AccountSettingsViewController *settingsViewController = [[AccountSettingsViewController alloc] init];
-    settingsViewController.account = [self defaultAccount];
+    AccountSettingsViewController *settingsViewController = [[AccountSettingsViewController alloc] initWithAccount:[self defaultAccount]];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 

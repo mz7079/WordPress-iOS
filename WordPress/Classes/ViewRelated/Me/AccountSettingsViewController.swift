@@ -1,45 +1,34 @@
 import Foundation
 import UIKit
+import RxSwift
 import WordPressShared
 import WordPressComAnalytics
 
 typealias ImmuTableRowControllerGenerator = ImmuTableRow -> UIViewController
 
-class AccountSettingsViewController: UITableViewController {
-    var account: WPAccount! {
-        didSet {
-            self.service = AccountSettingsService(userID: account.userID.integerValue, api: account.restApi)
-        }
+class AccountSettingsController: SettingsController {
+    let title = NSLocalizedString("Account Settings", comment: "Account Settings Title");
+    let service: AccountSettingsService
+    unowned var presenter: SettingsPresenter
+
+    init(service: AccountSettingsService, presenter: SettingsPresenter) {
+        self.service = service
+        self.presenter = presenter
     }
 
-    var service: AccountSettingsService!
-
-    var handler: ImmuTableViewHandler!
-
-    required convenience init() {
-        self.init(style: .Grouped)
+    convenience init(account: WPAccount, presenter: SettingsPresenter) {
+        self.init(service: AccountSettingsService(userID: account.userID.integerValue, api: account.restApi), presenter: presenter)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    var viewModel: Observable<ImmuTable> {
+        return service.settingsObserver.map(mapViewModel)
+    }
 
-        self.title = NSLocalizedString("Account Settings", comment: "Account Settings Title");
-
-        ImmuTable.registerRows([
-            TextRow.self,
-            EditableTextRow.self,
-            MediaSizeRow.self,
-            SwitchRow.self
-            ], tableView: self.tableView)
-        handler = ImmuTableViewHandler(takeOver: self)
-
-        WPStyleGuide.resetReadableMarginsForTableView(tableView)
-        WPStyleGuide.configureColorsForView(view, andTableView: tableView)
-
+    func refresh() {
         service.refreshSettings({ _ in })
     }
 
-    func buildViewModel(settings: AccountSettings?) {
+    func mapViewModel(settings: AccountSettings?) -> ImmuTable {
         let username = TextRow(
             title: NSLocalizedString("Username", comment: "Account Settings Username label"),
             value: settings?.username ?? "")
@@ -47,13 +36,13 @@ class AccountSettingsViewController: UITableViewController {
         let email = EditableTextRow(
             title: NSLocalizedString("Email", comment: "Account Settings Email label"),
             value: settings?.email ?? "",
-            action: push(editEmail())
+            action: presenter.push(editEmail())
         )
 
         let webAddress = EditableTextRow(
             title: NSLocalizedString("Web Address", comment: "Account Settings Web Address label"),
             value: settings?.webAddress ?? "",
-            action: push(editWebAddress())
+            action: presenter.push(editWebAddress())
         )
 
         let uploadSize = MediaSizeRow(
@@ -67,7 +56,7 @@ class AccountSettingsViewController: UITableViewController {
             onChange: visualEditorChanged()
         )
 
-        handler.viewModel = ImmuTable(sections: [
+        return ImmuTable(sections: [
             ImmuTableSection(
                 rows: [
                     username,
@@ -89,6 +78,16 @@ class AccountSettingsViewController: UITableViewController {
             ])
     }
 
+    var immutableRows: [ImmuTableRow.Type] {
+        return [
+            TextRow.self,
+            EditableTextRow.self,
+            MediaSizeRow.self,
+            SwitchRow.self]
+    }
+
+    // MARK: - Actions
+
     func editEmail() -> ImmuTableRowControllerGenerator {
         return editText(AccountSettingsChange.Email, hint: NSLocalizedString("Will not be publicly displayed", comment: "Help text when editing email"))
     }
@@ -97,47 +96,6 @@ class AccountSettingsViewController: UITableViewController {
         return editText(AccountSettingsChange.WebAddress, hint: NSLocalizedString("Shown publicly when you comment on blogs.", comment: "Help text when editing web address"))
     }
 
-    func editText(changeType: (AccountSettingsChangeWithString), hint: String? = nil) -> ImmuTableRowControllerGenerator {
-        return { [unowned self] row in
-            let row = row as! EditableTextRow
-            return self.controllerForEditableText(row, changeType: changeType, hint: hint)
-        }
-    }
-
-    func push(controllerGenerator: ImmuTableRowControllerGenerator) -> ImmuTableAction {
-        return {
-            [unowned self]
-            row in
-
-            let controller = controllerGenerator(row)
-
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-    }
-
-    func controllerForEditableText(row: EditableTextRow, changeType: (AccountSettingsChangeWithString), hint: String? = nil, isPassword: Bool = false) -> SettingsTextViewController {
-        let title = row.title
-        let value = row.value
-
-        let controller = SettingsTextViewController(
-            text: value,
-            placeholder: "\(title)...",
-            hint: hint,
-            isPassword: isPassword)
-
-        controller.title = title
-        controller.onValueChanged = {
-            [unowned self]
-            value in
-
-            let change = changeType(value)
-            self.service.saveChange(change)
-            DDLogSwift.logDebug("\(title) changed: \(value)")
-        }
-
-        return controller
-    }
-    
     func mediaSizeChanged() -> Int -> Void {
         return {
             value in
@@ -156,6 +114,50 @@ class AccountSettingsViewController: UITableViewController {
             }
             WPPostViewController.setNewEditorEnabled(enabled)
         }
+    }
+}
+
+class AccountSettingsViewController: UITableViewController, SettingsPresenter {
+    let account: WPAccount
+
+    lazy var controller: AccountSettingsController = {
+        return AccountSettingsController(account: self.account, presenter: self)
+    }()
+
+    var handler: ImmuTableViewHandler!
+
+    // MARK: - Table View Controller
+
+    init(account: WPAccount) {
+        self.account = account
+        super.init(style: .Grouped)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.title = controller.title
+
+        ImmuTable.registerRows(controller.immutableRows, tableView: self.tableView)
+
+        handler = ImmuTableViewHandler(takeOver: self)
+        _ = controller.viewModel
+            .takeUntil(self.rx_deallocated)
+            .observeOn(MainScheduler.sharedInstance)
+            .subscribeNext(bindViewModel)
+
+        controller.refresh()
+
+        WPStyleGuide.resetReadableMarginsForTableView(tableView)
+        WPStyleGuide.configureColorsForView(view, andTableView: tableView)
+    }
+
+    func bindViewModel(viewModel: ImmuTable) {
+        handler.viewModel = viewModel
     }
 }
 

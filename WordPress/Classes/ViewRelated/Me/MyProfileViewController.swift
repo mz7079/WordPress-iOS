@@ -84,6 +84,8 @@ class MyProfileViewController: UITableViewController, SettingsPresenter {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.title = controller.title
+        
         ImmuTable.registerRows(controller.immutableRows, tableView: self.tableView)
 
         handler = ImmuTableViewHandler(takeOver: self)
