@@ -1,9 +1,6 @@
 import UIKit
+import RxSwift
 import WordPressShared
-
-protocol MyProfileViewModelObserver: AnyObject {
-    func viewModelChanged(viewModel: MyProfileViewModel)
-}
 
 protocol MyProfilePresenter: AnyObject {
     func push<T>(controllerGenerator: T -> UIViewController) -> T -> Void
@@ -19,7 +16,7 @@ extension MyProfilePresenter where Self: UIViewController {
     }
 }
 
-protocol MyProfileDelegate: MyProfileViewModelObserver, MyProfilePresenter {}
+protocol MyProfileDelegate: MyProfilePresenter {}
 
 struct MyProfileViewModel {
     let title = NSLocalizedString("My Profile", comment: "My Profile view title")
@@ -30,17 +27,6 @@ class MyProfileController {
     let service: AccountSettingsService
     unowned var delegate: MyProfileDelegate
 
-    var subscription: AccountSettingsSubscription? = nil
-    var visible = false {
-        didSet {
-            if visible {
-                subscribe()
-            } else {
-                unsubscribe()
-            }
-        }
-    }
-
     init(service: AccountSettingsService, delegate: MyProfileDelegate) {
         self.service = service
         self.delegate = delegate
@@ -48,6 +34,14 @@ class MyProfileController {
 
     convenience init(account: WPAccount, delegate: MyProfileDelegate) {
         self.init(service: AccountSettingsService(userID: account.userID.integerValue, api: account.restApi), delegate: delegate)
+    }
+
+    var viewModel: Observable<MyProfileViewModel> {
+        return service.settingsObserver.map(mapViewModel)
+    }
+
+    func refresh() {
+        service.refreshSettings({ _ in })
     }
 
     func mapViewModel(settings: AccountSettings?) -> MyProfileViewModel {
@@ -84,23 +78,6 @@ class MyProfileController {
 
     var immutableRows: [ImmuTableRow.Type] {
         return [EditableTextRow.self]
-    }
-
-    // MARK: - Model Subscription
-
-    func subscribe() {
-        subscription = service.subscribeSettings({
-            [unowned self]
-            (settings) -> Void in
-
-            DDLogSwift.logDebug("Got settings \(settings)")
-            let viewModel = self.mapViewModel(settings)
-            self.delegate.viewModelChanged(viewModel)
-        })
-    }
-
-    func unsubscribe() {
-        subscription = nil
     }
 
     // MARK: - Actions
@@ -162,20 +139,18 @@ class MyProfileViewController: UITableViewController, MyProfileDelegate {
         ImmuTable.registerRows(controller.immutableRows, tableView: self.tableView)
 
         handler = ImmuTableViewHandler(takeOver: self)
+        _ = controller.viewModel
+            .takeUntil(self.rx_deallocated)
+            .observeOn(MainScheduler.sharedInstance)
+            .subscribeNext(bindViewModel)
+
+        controller.refresh()
 
         WPStyleGuide.resetReadableMarginsForTableView(tableView)
         WPStyleGuide.configureColorsForView(view, andTableView: tableView)
     }
 
-    override func viewWillAppear(animated: Bool) {
-        controller.visible = true
-    }
-
-    override func viewWillDisappear(animated: Bool) {
-        controller.visible = false
-    }
-
-    func viewModelChanged(viewModel: MyProfileViewModel) {
+    func bindViewModel(viewModel: MyProfileViewModel) {
         title = viewModel.title
         handler.viewModel = viewModel.tableViewModel
     }
