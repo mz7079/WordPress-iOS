@@ -76,7 +76,6 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     public func configureTextFields() {
         let textFieldsArray = allTextFields()
         for textField in textFieldsArray {
-            textField.frame = CGRectMake(0.0, 0.0, 320.0, 44.0)
             textFields.addArrangedSubview(textField)
         }
     }
