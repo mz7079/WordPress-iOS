@@ -2,8 +2,6 @@
 #import "Blog.h"
 #import "WordPressAppDelegate.h"
 #import "JetpackSettingsViewController.h"
-#import "StatsWebViewController.h"
-#import "WPChromelessWebViewController.h"
 #import "WPAccount.h"
 #import "ContextManager.h"
 #import "BlogService.h"
@@ -14,6 +12,7 @@
 #import <WordPressShared/WPNoResultsView.h>
 #import "WordPress-Swift.h"
 #import "WPAppAnalytics.h"
+#import "WPWebViewController.h"
 
 static NSString *const StatsBlogObjectURLRestorationKey = @"StatsBlogObjectURL";
 
@@ -138,8 +137,10 @@ static NSString *const StatsBlogObjectURLRestorationKey = @"StatsBlogObjectURL";
     __weak JetpackSettingsViewController *safeController = controller;
     [controller setCompletionBlock:^(BOOL didAuthenticate) {
         if (didAuthenticate) {
-            [WPAnalytics track:WPAnalyticsStatSignedInToJetpack withProperties:@{ WPAppAnalyticsKeyBlogID:self.blog.dotComID }];
-            [WPAnalytics track:WPAnalyticsStatPerformedJetpackSignInFromStatsScreen withProperties:@{ WPAppAnalyticsKeyBlogID:self.blog.dotComID }];
+            
+            [WPAppAnalytics track:WPAnalyticsStatSignedInToJetpack withBlog:self.blog];
+            [WPAppAnalytics track:WPAnalyticsStatPerformedJetpackSignInFromStatsScreen withBlog:self.blog];
+
             [safeController.view removeFromSuperview];
             [safeController removeFromParentViewController];
             self.showingJetpackLogin = NO;
@@ -153,19 +154,10 @@ static NSString *const StatsBlogObjectURLRestorationKey = @"StatsBlogObjectURL";
 }
 
 
-- (void)statsViewController:(WPStatsViewController *)statsViewController didSelectViewWebStatsForSiteID:(NSNumber *)siteID
-{
-    StatsWebViewController *vc = [[StatsWebViewController alloc] init];
-    vc.blog = self.blog;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-
 - (void)statsViewController:(WPStatsViewController *)controller openURL:(NSURL *)url
 {
-    WPChromelessWebViewController *vc = [[WPChromelessWebViewController alloc] init];
-    [vc loadPath:url.absoluteString];
-    [self.navigationController pushViewController:vc animated:YES];
+    WPWebViewController *webVC = [WPWebViewController authenticatedWebViewController:url];
+    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 

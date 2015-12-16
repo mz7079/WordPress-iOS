@@ -67,7 +67,7 @@
                 WPAccount *account = [accountService findAccountWithUsername:dotcomUsername];
                 if (account) {
                     blog.jetpackAccount = account;
-                    [WPAnalytics track:WPAnalyticsStatSignedInToJetpack withProperties:@{ WPAppAnalyticsKeyBlogID:blog.dotComID }];
+                    [WPAppAnalytics track:WPAnalyticsStatSignedInToJetpack withBlog:blog];
                 }
             }
         } else {

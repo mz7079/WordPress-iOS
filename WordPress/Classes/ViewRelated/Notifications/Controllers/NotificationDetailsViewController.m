@@ -1010,7 +1010,8 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)followSiteWithBlock:(NotificationBlock *)block
 {
-    [WPAnalytics track:WPAnalyticsStatNotificationsSiteFollowAction withProperties:@{ WPAppAnalyticsKeyBlogID:block.metaSiteID }];
+    
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsSiteFollowAction withBlogID:block.metaSiteID];
     
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     ReaderSiteService *service      = [[ReaderSiteService alloc] initWithManagedObjectContext:context];
@@ -1026,7 +1027,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)unfollowSiteWithBlock:(NotificationBlock *)block
 {
-    [WPAnalytics track:WPAnalyticsStatNotificationsSiteUnfollowAction withProperties:@{ WPAppAnalyticsKeyBlogID:block.metaSiteID }];
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsSiteUnfollowAction withBlogID:block.metaSiteID];
     
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     ReaderSiteService *service      = [[ReaderSiteService alloc] initWithManagedObjectContext:context];
@@ -1042,8 +1043,9 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)likeCommentWithBlock:(NotificationBlock *)block
 {
-    [WPAnalytics track:WPAnalyticsStatNotificationsCommentLiked withProperties:@{ WPAppAnalyticsKeyBlogID:block.metaSiteID }];
 
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentLiked withBlogID:block.metaSiteID];
+    
     // If the associated comment is *not* approved, let's attempt to auto-approve it, automatically
     if (!block.isCommentApproved) {
         [self approveCommentWithBlock:block];
@@ -1064,7 +1066,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)unlikeCommentWithBlock:(NotificationBlock *)block
 {
-    [WPAnalytics track:WPAnalyticsStatNotificationsCommentUnliked withProperties:@{ WPAppAnalyticsKeyBlogID:block.metaSiteID }];
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentUnliked withBlogID:block.metaSiteID];
     
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     CommentService *service         = [[CommentService alloc] initWithManagedObjectContext:context];
@@ -1080,7 +1082,8 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)approveCommentWithBlock:(NotificationBlock *)block
 {
-    [WPAnalytics track:WPAnalyticsStatNotificationsCommentApproved withProperties:@{ WPAppAnalyticsKeyBlogID:block.metaSiteID }];
+ 
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentApproved withBlogID:block.metaSiteID];
     
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     CommentService *service         = [[CommentService alloc] initWithManagedObjectContext:context];
@@ -1100,8 +1103,8 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)unapproveCommentWithBlock:(NotificationBlock *)block
 {
-    [WPAnalytics track:WPAnalyticsStatNotificationsCommentUnapproved withProperties:@{ WPAppAnalyticsKeyBlogID:block.metaSiteID }];
-    
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentUnapproved withBlogID:block.metaSiteID];
+  
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     CommentService *service         = [[CommentService alloc] initWithManagedObjectContext:context];
     __typeof(self) __weak weakSelf  = self;
@@ -1136,7 +1139,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
             onCompletion(NO);
         }];
         
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentFlaggedAsSpam withProperties:@{ WPAppAnalyticsKeyBlogID:block.metaSiteID }];
+        [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentFlaggedAsSpam withBlogID:block.metaSiteID];
     };
     
     // Confirmation AlertView
@@ -1174,7 +1177,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
             onCompletion(NO);
         }];
         
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentTrashed withProperties:@{ WPAppAnalyticsKeyBlogID:block.metaSiteID }];
+        [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentTrashed withBlogID:block.metaSiteID];
     };
     
     // Confirmation AlertView

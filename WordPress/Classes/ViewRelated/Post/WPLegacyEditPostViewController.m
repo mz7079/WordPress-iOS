@@ -367,7 +367,8 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     }
 
     if (![self.post hasUnsavedChanges]) {
-        [WPAnalytics track:WPAnalyticsStatEditorClosed withProperties:@{ WPAppAnalyticsKeyBlogID:self.post.blog.dotComID} ];
+        [WPAppAnalytics track:WPAnalyticsStatEditorClosed withBlog:self.post.blog];
+
         [self discardChanges];
         [self dismissEditView];
         return;
@@ -384,7 +385,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
                                 handler:^(UIAlertAction * action) {
                                     [self discardChanges];
                                     [self dismissEditView];
-                                    [WPAnalytics track:WPAnalyticsStatEditorDiscardedChanges withProperties:@{ WPAppAnalyticsKeyBlogID:self.post.blog.dotComID} ];
+                                    [WPAppAnalytics track:WPAnalyticsStatEditorDiscardedChanges withBlog:self.post.blog];
                                 }];
     
     if ([self.post.original.status isEqualToString:PostStatusDraft]) {
@@ -665,7 +666,10 @@ static void *ProgressObserverContext = &ProgressObserverContext;
         properties[@"word_diff_count"] = @(wordCount - originalWordCount);
     }
 
-    properties[WPAppAnalyticsKeyBlogID] = [self.post blog].dotComID;
+    NSNumber *dotComID = [self.post blog].dotComID;
+    if (dotComID) {
+        properties[WPAppAnalyticsKeyBlogID] = dotComID;
+    }
     
     if ([buttonTitle isEqualToString:NSLocalizedString(@"Publish", nil)]) {
         properties[WPAnalyticsStatEditorPublishedPostPropertyCategory] = @([self.post hasCategories]);
@@ -961,8 +965,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 
 - (void)insertMedia:(Media *)media
 {
-    [WPAnalytics track:WPAnalyticsStatEditorAddedPhotoViaLocalLibrary withProperties:@{ WPAppAnalyticsKeyBlogID:[self.post blog].dotComID} ];
-    
+    [WPAppAnalytics track:WPAnalyticsStatEditorAddedPhotoViaLocalLibrary withBlog:self.post.blog];
     NSString *prefix = @"<br /><br />";
 
     if (self.post.content == nil || [self.post.content isEqualToString:@""]) {

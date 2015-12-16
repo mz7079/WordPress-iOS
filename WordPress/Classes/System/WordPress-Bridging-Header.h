@@ -12,6 +12,8 @@
 #import "DateUtils.h"
 #import "DDLogSwift.h"
 
+#import "MediaService.h"
+
 #import "Notification.h"
 #import "Notification+Internals.h"
 #import "NotificationsManager.h"
@@ -37,6 +39,7 @@
 #import "RemoteReaderTopic.h"
 
 #import "ServiceRemoteREST.h"
+#import "SettingsSelectionViewController.h"
 #import "SourcePostAttribution.h"
 #import "SuggestionsTableView.h"
 
@@ -44,6 +47,7 @@
 #import "ThemeService.h"
 
 #import "UIAlertControllerProxy.h"
+#import <UIDeviceIdentifier/UIDeviceHardware.h>
 #import "UIDevice+Helpers.h"
 #import "UIImage+Resize.h"
 #import "UIImageView+Gravatar.h"
@@ -55,6 +59,7 @@
 #import "WPActivityDefaults.h"
 #import "WPAnimatedBox.h"
 #import "WPAnalyticsTrackerWPCom.h"
+#import "WPAppAnalytics.h"
 #import "WPBlogTableViewCell.h"
 #import "WPContentViewProvider.h"
 #import "WPGUIConstants.h"
