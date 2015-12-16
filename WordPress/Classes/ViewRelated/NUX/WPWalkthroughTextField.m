@@ -55,17 +55,26 @@
                              returnKeyType:type
                                   delegate:delegate];
     if (self) {
-        UILabel *rightLabel = [[UILabel alloc] init];
-        rightLabel.text = rightLabelText;
-        rightLabel.textAlignment = NSTextAlignmentCenter;
-        rightLabel.font = [WPNUXUtility descriptionTextFont];
-        rightLabel.textColor = [WPStyleGuide allTAllShadeGrey];
-        [rightLabel sizeToFit];
-        
-        UIEdgeInsets rightLabelTextInsets = self.textInsets;
-        rightLabelTextInsets.right += rightLabel.frame.size.width + 10;
-        [self setTextInsets:rightLabelTextInsets];
-        [self addSubview:rightLabel];
+//        UILabel *rightLabel = [[UILabel alloc] init];
+//        rightLabel.text = rightLabelText;
+//        rightLabel.textAlignment = NSTextAlignmentCenter;
+//        rightLabel.font = [WPNUXUtility descriptionTextFont];
+//        rightLabel.textColor = [WPStyleGuide allTAllShadeGrey];
+//        [rightLabel sizeToFit];
+//        
+//        UIEdgeInsets rightLabelTextInsets = self.textInsets;
+//        rightLabelTextInsets.right += rightLabel.frame.size.width + 10;
+//        [self setTextInsets:rightLabelTextInsets];
+//        [self addSubview:rightLabel];
+//        
+//        [rightLabel sizeToFit];
+//        CGSize rightLabelSize = rightLabel.frame.size;
+//        rightLabelSize.height = self.frame.size.height - 10;
+//        rightLabelSize.width += 10;
+//        rightLabel.frame = CGRectMake(self.frame.size.width - rightLabelSize.width - 5,
+//                                                  (self.frame.size.height - rightLabelSize.height) / 2 - 1,
+//                                                  rightLabelSize.width,
+//                                                  rightLabelSize.height);
     }
     return self;
 }
