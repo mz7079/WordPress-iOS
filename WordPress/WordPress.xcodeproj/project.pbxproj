@@ -449,6 +449,7 @@
 		BE45531D1C03D808001FBE16 /* WPNUXAbstractCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE45531B1C03D808001FBE16 /* WPNUXAbstractCreationViewController.swift */; };
 		BE45531E1C03D808001FBE16 /* WPNUXAbstractCreationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE45531C1C03D808001FBE16 /* WPNUXAbstractCreationViewController.xib */; };
 		BE4553201C03E074001FBE16 /* CreateNewSiteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE45531F1C03E074001FBE16 /* CreateNewSiteViewController.swift */; };
+		BE8149F71C2128A100DA6486 /* WPNUXNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8149F61C2128A100DA6486 /* WPNUXNavigationController.swift */; };
 		BEBFE86F1B2F50C5002C04EF /* WPSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEBFE86E1B2F50C5002C04EF /* WPSearchController.m */; };
 		BEBFE8721B2F50E0002C04EF /* WPSearchControllerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = BEBFE8711B2F50E0002C04EF /* WPSearchControllerConfigurator.m */; };
 		BEC62E2C1BF2F58D007685B2 /* CreateNewBlogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC62E2B1BF2F58D007685B2 /* CreateNewBlogViewController.m */; };
@@ -1453,6 +1454,7 @@
 		BE45531B1C03D808001FBE16 /* WPNUXAbstractCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WPNUXAbstractCreationViewController.swift; path = Controllers/WPNUXAbstractCreationViewController.swift; sourceTree = "<group>"; };
 		BE45531C1C03D808001FBE16 /* WPNUXAbstractCreationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WPNUXAbstractCreationViewController.xib; path = Controllers/WPNUXAbstractCreationViewController.xib; sourceTree = "<group>"; };
 		BE45531F1C03E074001FBE16 /* CreateNewSiteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateNewSiteViewController.swift; path = Controllers/CreateNewSiteViewController.swift; sourceTree = "<group>"; };
+		BE8149F61C2128A100DA6486 /* WPNUXNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WPNUXNavigationController.swift; path = Controllers/WPNUXNavigationController.swift; sourceTree = "<group>"; };
 		BEBFE86D1B2F50C5002C04EF /* WPSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPSearchController.h; path = Search/WPSearchController.h; sourceTree = "<group>"; };
 		BEBFE86E1B2F50C5002C04EF /* WPSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPSearchController.m; path = Search/WPSearchController.m; sourceTree = "<group>"; };
 		BEBFE8701B2F50E0002C04EF /* WPSearchControllerConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPSearchControllerConfigurator.h; path = Search/WPSearchControllerConfigurator.h; sourceTree = "<group>"; };
@@ -3336,6 +3338,7 @@
 				BE45531B1C03D808001FBE16 /* WPNUXAbstractCreationViewController.swift */,
 				BE45531C1C03D808001FBE16 /* WPNUXAbstractCreationViewController.xib */,
 				BE45531F1C03E074001FBE16 /* CreateNewSiteViewController.swift */,
+				BE8149F61C2128A100DA6486 /* WPNUXNavigationController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -4878,6 +4881,7 @@
 				B54E1DF41A0A7BBF00807537 /* NotificationMediaDownloader.swift in Sources */,
 				E174F6E6172A73960004F23A /* WPAccount.m in Sources */,
 				E100C6BB1741473000AE48D8 /* WordPress-11-12.xcmappingmodel in Sources */,
+				BE8149F71C2128A100DA6486 /* WPNUXNavigationController.swift in Sources */,
 				E1A03EE217422DCF0085D192 /* BlogToAccount.m in Sources */,
 				5D44EB381986D8BA008B7175 /* ReaderSiteService.m in Sources */,
 				E1A03F48174283E10085D192 /* BlogToJetpackAccount.m in Sources */,
