@@ -607,7 +607,8 @@ static NSTimeInterval HideAllSitesInterval = 2.0;
     [self setEditing:NO animated:NO];
 
     CreateNewSiteViewController *createNewSiteViewController = [[CreateNewSiteViewController alloc] initWithNibName:@"WPNUXAbstractCreationViewController" bundle:nil];
-    [self.navigationController presentViewController:createNewSiteViewController animated:YES completion:nil];
+    UINavigationController *createNewSiteNavigationController = [[UINavigationController alloc] initWithRootViewController:createNewSiteViewController];
+    [self.navigationController presentViewController:createNewSiteNavigationController animated:YES completion:nil];
 }
 
 - (void)showLoginControllerForAddingSelfHostedSite
