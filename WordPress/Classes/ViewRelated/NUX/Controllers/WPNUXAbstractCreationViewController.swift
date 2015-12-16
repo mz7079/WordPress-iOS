@@ -68,7 +68,7 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
         return String()
     }
     
-    func configureTitle() {
+    public func configureTitle() {
         let titleAttributes: [String : AnyObject] = WPNUXUtility.titleAttributesWithColor(UIColor.whiteColor()) as! [String : AnyObject]
         titleLabel.attributedText = NSAttributedString(string: titleLabelString(), attributes: titleAttributes)
     }
@@ -76,6 +76,8 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     public func configureTextFields() {
         let textFieldsArray = allTextFields()
         for textField in textFieldsArray {
+            textField.heightAnchor.constraintEqualToConstant(44.0).active = true
+            textField.widthAnchor.constraintEqualToConstant(320.0).active = true
             textFields.addArrangedSubview(textField)
         }
     }
