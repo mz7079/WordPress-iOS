@@ -403,16 +403,16 @@ static NSString *const MVCCellReuseIdentifier = @"MVCCellReuseIdentifier";
 - (void)navigateToMyProfile
 {
     [WPAnalytics track:WPAnalyticsStatOpenedMyProfile];
-    MyProfileViewController *controller = [[MyProfileViewController alloc] initWithAccount:[self defaultAccount]];
-    [self.navigationController pushViewController:controller animated:YES];
+    MyProfileController *controller = [[MyProfileController alloc] initWithAccount:[self defaultAccount]];
+    [self.navigationController pushViewController:controller.viewController animated:YES];
 }
 
 - (void)navigateToAccountSettings
 {
     [WPAnalytics track:WPAnalyticsStatOpenedAccountSettings];
 
-    AccountSettingsViewController *settingsViewController = [[AccountSettingsViewController alloc] initWithAccount:[self defaultAccount]];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
+    AccountSettingsController *controller = [[AccountSettingsController alloc] initWithAccount:[self defaultAccount]];
+    [self.navigationController pushViewController:controller.viewController animated:YES];
 }
 
 - (void)navigateToNotificationSettings

@@ -257,6 +257,14 @@ public class ImmuTableViewHandler: NSObject, UITableViewDataSource, UITableViewD
         }
     }
 
+    /**
+     Registers the row custom class or nib with the table view so it can later be
+     dequeued with `dequeueReusableCellWithIdentifier(_:forIndexPath:)`
+     */
+    public func registerRows(rows: [ImmuTableRow.Type]) {
+        ImmuTable.registerRows(rows, registrator: target.tableView)
+    }
+
     // MARK: Table View Data Source
 
     public func numberOfSectionsInTableView(tableView: UITableView) -> Int {

@@ -1,5 +1,6 @@
 import UIKit
 import RxSwift
+import WordPressShared
 
 protocol SettingsPresenter: AnyObject {
     func push<T>(controllerGenerator: T -> UIViewController) -> T -> Void
@@ -22,6 +23,9 @@ protocol SettingsController: AnyObject {
 }
 
 // Actions
+
+typealias ImmuTableRowControllerGenerator = ImmuTableRow -> UIViewController
+
 extension SettingsController {
     func editText(changeType: (AccountSettingsChangeWithString), hint: String? = nil) -> ImmuTableRowControllerGenerator {
         return { [unowned self] row in
@@ -54,3 +58,29 @@ extension SettingsController {
     }
 }
 
+class SettingsViewController: UITableViewController, SettingsPresenter {
+    lazy var handler: ImmuTableViewHandler = {
+        return ImmuTableViewHandler(takeOver: self)
+    }()
+
+    // MARK: - Table View Controller
+
+    init() {
+        super.init(style: .Grouped)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        WPStyleGuide.resetReadableMarginsForTableView(tableView)
+        WPStyleGuide.configureColorsForView(view, andTableView: tableView)
+    }
+
+    func bindViewModel(viewModel: ImmuTable) {
+        handler.viewModel = viewModel
+    }
+}

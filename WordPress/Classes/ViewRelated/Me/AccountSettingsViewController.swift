@@ -1,31 +1,30 @@
 import Foundation
 import UIKit
 import RxSwift
-import WordPressShared
 import WordPressComAnalytics
 
-typealias ImmuTableRowControllerGenerator = ImmuTableRow -> UIViewController
-
-class AccountSettingsController: SettingsController {
+class AccountSettingsController: NSObject, SettingsController {
     let title = NSLocalizedString("Account Settings", comment: "Account Settings Title");
     let service: AccountSettingsService
-    unowned var presenter: SettingsPresenter
+    let viewController = SettingsViewController()
 
-    init(service: AccountSettingsService, presenter: SettingsPresenter) {
+    init(service: AccountSettingsService) {
         self.service = service
-        self.presenter = presenter
+        super.init()
+        viewController.title = title
+        viewController.handler.registerRows(immutableRows)
+        _ = viewModel
+            .observeOn(MainScheduler.sharedInstance)
+            .takeUntil(viewController.rx_deallocated)
+            .subscribeNext(viewController.bindViewModel)
     }
 
-    convenience init(account: WPAccount, presenter: SettingsPresenter) {
-        self.init(service: AccountSettingsService(userID: account.userID.integerValue, api: account.restApi), presenter: presenter)
+    convenience init(account: WPAccount) {
+        self.init(service: AccountSettingsService(userID: account.userID.integerValue, api: account.restApi))
     }
 
     var viewModel: Observable<ImmuTable> {
         return service.settingsObserver.map(mapViewModel)
-    }
-
-    func refresh() {
-        service.refreshSettings({ _ in })
     }
 
     func mapViewModel(settings: AccountSettings?) -> ImmuTable {
@@ -36,13 +35,13 @@ class AccountSettingsController: SettingsController {
         let email = EditableTextRow(
             title: NSLocalizedString("Email", comment: "Account Settings Email label"),
             value: settings?.email ?? "",
-            action: presenter.push(editEmail())
+            action: viewController.push(editEmail())
         )
 
         let webAddress = EditableTextRow(
             title: NSLocalizedString("Web Address", comment: "Account Settings Web Address label"),
             value: settings?.webAddress ?? "",
-            action: presenter.push(editWebAddress())
+            action: viewController.push(editWebAddress())
         )
 
         let uploadSize = MediaSizeRow(
@@ -117,47 +116,4 @@ class AccountSettingsController: SettingsController {
     }
 }
 
-class AccountSettingsViewController: UITableViewController, SettingsPresenter {
-    let account: WPAccount
-
-    lazy var controller: AccountSettingsController = {
-        return AccountSettingsController(account: self.account, presenter: self)
-    }()
-
-    var handler: ImmuTableViewHandler!
-
-    // MARK: - Table View Controller
-
-    init(account: WPAccount) {
-        self.account = account
-        super.init(style: .Grouped)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.title = controller.title
-
-        ImmuTable.registerRows(controller.immutableRows, tableView: self.tableView)
-
-        handler = ImmuTableViewHandler(takeOver: self)
-        _ = controller.viewModel
-            .takeUntil(self.rx_deallocated)
-            .observeOn(MainScheduler.sharedInstance)
-            .subscribeNext(bindViewModel)
-
-        controller.refresh()
-
-        WPStyleGuide.resetReadableMarginsForTableView(tableView)
-        WPStyleGuide.configureColorsForView(view, andTableView: tableView)
-    }
-
-    func bindViewModel(viewModel: ImmuTable) {
-        handler.viewModel = viewModel
-    }
-}
 
