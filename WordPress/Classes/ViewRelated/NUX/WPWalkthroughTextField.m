@@ -1,4 +1,5 @@
 #import "WPWalkthroughTextField.h"
+#import "WPNUXUtility.h"
 
 @interface WPWalkthroughTextField ()
 @property (nonatomic, strong) UIImage *leftViewImage;
@@ -39,6 +40,76 @@
         self.leftViewImage = image;
         self.leftView = [[UIImageView alloc] initWithImage:image];
         self.leftViewMode = UITextFieldViewModeAlways;
+    }
+    return self;
+}
+
+- (instancetype)initWithLeftViewImage:(UIImage *)image
+                       rightLabelText:(NSString *)rightLabelText
+                          placeholder:(NSString *)placeholder
+                        returnKeyType:(UIReturnKeyType)type
+                             delegate:(id<UITextFieldDelegate>)delegate
+{
+    self = [self initTextWithLeftViewImage:image
+                               placeholder:placeholder
+                             returnKeyType:type
+                                  delegate:delegate];
+    if (self) {
+        UILabel *rightLabel = [[UILabel alloc] init];
+        rightLabel.text = rightLabelText;
+        rightLabel.textAlignment = NSTextAlignmentCenter;
+        rightLabel.font = [WPNUXUtility descriptionTextFont];
+        rightLabel.textColor = [WPStyleGuide allTAllShadeGrey];
+        [rightLabel sizeToFit];
+        
+        UIEdgeInsets rightLabelTextInsets = self.textInsets;
+        rightLabelTextInsets.right += rightLabel.frame.size.width + 10;
+        [self setTextInsets:rightLabelTextInsets];
+        [self addSubview:rightLabel];
+    }
+    return self;
+}
+
+- (instancetype)initTextWithLeftViewImage:(UIImage *)image
+                              placeholder:(NSString *)placeholder
+                            returnKeyType:(UIReturnKeyType)type
+                                 delegate:(id<UITextFieldDelegate>)delegate
+{
+    self = [self initWithLeftViewImage:image];
+    if (self) {
+        self.backgroundColor = [UIColor whiteColor];
+        self.placeholder = placeholder;
+        self.font = [WPNUXUtility textFieldFont];
+        self.accessibilityLabel = placeholder;
+        self.adjustsFontSizeToFitWidth = YES;
+        self.showTopLineSeparator = YES;
+        self.autocorrectionType = UITextAutocorrectionTypeNo;
+        self.autocapitalizationType = UITextAutocorrectionTypeNo;
+        self.returnKeyType = type;
+        self.delegate = delegate;
+    }
+    return self;
+}
+
+- (instancetype)initPasswordWithLeftViewImage:(UIImage *)image
+                                  placeholder:(NSString *)placeholder
+                                returnKeyType:(UIReturnKeyType)type
+                                     delegate:(id<UITextFieldDelegate>)delegate
+{
+    self = [self initWithLeftViewImage:image];
+    if (self) {
+        self.backgroundColor = [UIColor whiteColor];
+        self.placeholder = placeholder;
+        self.font = [WPNUXUtility textFieldFont];
+        self.secureTextEntry = YES;
+        self.showSecureTextEntryToggle = YES;
+        self.showTopLineSeparator = YES;
+        self.accessibilityLabel = placeholder;
+        self.adjustsFontSizeToFitWidth = YES;
+        self.autocorrectionType = UITextAutocorrectionTypeNo;
+        self.autocapitalizationType = UITextAutocorrectionTypeNo;
+        self.returnKeyType = type;
+        self.delegate = delegate;
     }
     return self;
 }
