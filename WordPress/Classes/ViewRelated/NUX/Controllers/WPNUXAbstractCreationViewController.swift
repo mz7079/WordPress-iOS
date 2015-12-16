@@ -25,6 +25,14 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
         configureMainButton()
     }
     
+    override public func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            return .Portrait
+        } else {
+            return .All
+        }
+    }
+    
     func registerForKeyboardNotifications() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide", name: UIKeyboardDidHideNotification, object: nil)
