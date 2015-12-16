@@ -37,13 +37,13 @@
                         <action selector="helpButtonTapped:" destination="-1" eventType="touchUpInside" id="8jq-aU-VTR"/>
                     </connections>
                 </button>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DMG-CP-dqm">
-                    <rect key="frame" x="0.0" y="232" width="600" height="136"/>
+                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DMG-CP-dqm">
+                    <rect key="frame" x="0.0" y="232" width="600" height="164"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" image="icon-wp" translatesAutoresizingMaskIntoConstraints="NO" id="69t-iH-vly">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" ambiguous="YES" image="icon-wp" translatesAutoresizingMaskIntoConstraints="NO" id="69t-iH-vly">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="52"/>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBQ-TO-XMO">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBQ-TO-XMO">
                             <rect key="frame" x="0.0" y="52" width="600" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="zml-xo-hpf"/>
@@ -52,25 +52,20 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Xmj-DV-EIb">
-                            <rect key="frame" x="0.0" y="73" width="600" height="19"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Xmj-DV-EIb">
+                            <rect key="frame" x="0.0" y="73" width="600" height="50"/>
                             <edgeInsets key="layoutMargins" top="20" left="0.0" bottom="20" right="0.0"/>
                         </stackView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VPE-C3-NuX" customClass="WPNUXPrimaryButton">
-                            <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                        <button opaque="NO" contentMode="center" ambiguous="YES" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VPE-C3-NuX" customClass="WPNUXMainButton">
+                            <rect key="frame" x="0.0" y="123" width="600" height="41"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="44" id="gec-Tv-aIO"/>
-                                <constraint firstAttribute="width" constant="290" id="xzo-T6-aME"/>
+                                <constraint firstAttribute="width" constant="600" id="0Vd-NK-Hhc"/>
+                                <constraint firstAttribute="height" constant="41" id="QZQ-P8-sfF"/>
                             </constraints>
                             <state key="normal" title="Button"/>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="xzo-T6-aME"/>
-                                </mask>
-                            </variation>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mtp-p9-DIY" customClass="WPNUXSecondaryButton">
-                            <rect key="frame" x="0.0" y="136" width="600" height="0.0"/>
+                        <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mtp-p9-DIY" customClass="WPNUXSecondaryButton">
+                            <rect key="frame" x="0.0" y="164" width="600" height="0.0"/>
                             <state key="normal" title="Button"/>
                         </button>
                     </subviews>
@@ -94,7 +89,6 @@
                 <constraint firstAttribute="trailing" secondItem="bDR-67-FIl" secondAttribute="trailing" constant="20" id="ehY-RR-MiD"/>
                 <constraint firstItem="n6z-5P-WDu" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="24" id="jX8-ND-EsF"/>
                 <constraint firstAttribute="trailing" secondItem="DMG-CP-dqm" secondAttribute="trailing" id="qdx-RJ-ziO"/>
-                <constraint firstItem="DMG-CP-dqm" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="232" id="sAj-ch-VEX"/>
                 <constraint firstItem="n6z-5P-WDu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="seR-d2-yPc"/>
                 <constraint firstItem="n6z-5P-WDu" firstAttribute="bottom" secondItem="bDR-67-FIl" secondAttribute="bottom" id="wev-18-8HF"/>
             </constraints>
