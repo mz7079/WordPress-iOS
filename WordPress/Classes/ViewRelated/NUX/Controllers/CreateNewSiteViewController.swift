@@ -18,48 +18,14 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
     override func allTextFields() -> [WPWalkthroughTextField] {
         var textFieldsArray = [WPWalkthroughTextField]()
         
-        let siteTitleField = WPWalkthroughTextField(leftViewImage: UIImage(named: "icon-pencil"))
-        siteTitleField.backgroundColor = UIColor.whiteColor()
-        siteTitleField.placeholder = NSLocalizedString("Title", comment: "Title field")
-        siteTitleField.font = WPNUXUtility.textFieldFont()
-        siteTitleField.adjustsFontSizeToFitWidth = true
-        siteTitleField.delegate = self
-        siteTitleField.autocorrectionType = .No
-        siteTitleField.autocapitalizationType = .None
-        siteTitleField.accessibilityLabel = NSLocalizedString("Title", comment: "Title field")
-        siteTitleField.returnKeyType = .Next
+        let siteTitleField = WPWalkthroughTextField(textWithLeftViewImage: UIImage(named: "icon-pencil"), placeholder: NSLocalizedString("Title", comment: "Title field"), returnKeyType: .Next, delegate: self)
         siteTitleField.heightAnchor.constraintEqualToConstant(44.0).active = true
         siteTitleField.widthAnchor.constraintEqualToConstant(320.0).active = true
         
-        let siteAddressField = WPWalkthroughTextField(leftViewImage: UIImage(named: "icon-url-field"))
-        siteAddressField.backgroundColor = UIColor.whiteColor()
-        siteAddressField.placeholder = NSLocalizedString("Site Address", comment: "Site Address")
-        siteAddressField.font = WPNUXUtility.textFieldFont()
-        siteAddressField.adjustsFontSizeToFitWidth = true
-        siteAddressField.delegate = self
-        siteAddressField.autocorrectionType = .No
-        siteAddressField.autocapitalizationType = .None
-        siteAddressField.accessibilityLabel = NSLocalizedString("Title", comment: "Title field")
-        siteAddressField.returnKeyType = .Done
-        siteAddressField.showTopLineSeparator = true
+        let siteAddressField = WPWalkthroughTextField(leftViewImage: UIImage(named: "icon-url-field"), rightLabelText: ".wordpress.com", placeholder: NSLocalizedString("Site Address", comment: "Site Address"), returnKeyType: .Done, delegate: self)
         siteAddressField.heightAnchor.constraintEqualToConstant(44.0).active = true
         siteAddressField.widthAnchor.constraintEqualToConstant(320.0).active = true
         
-//        let siteAddressWPComLabel = UILabel()
-//        siteAddressWPComLabel.text = ".wordpress.com"
-//        siteAddressWPComLabel.textAlignment = .Center
-//        siteAddressWPComLabel.font = WPNUXUtility.descriptionTextFont()
-//        siteAddressWPComLabel.textColor = WPStyleGuide.allTAllShadeGrey()
-//        siteAddressWPComLabel.sizeToFit()
-//        
-//        var siteAddressTextInsets = siteAddressField.textInsets
-//        siteAddressTextInsets.right += siteAddressWPComLabel.frame.size.width + sizePadding
-//        siteAddressField.textInsets = siteAddressTextInsets
-//        siteAddressWPComLabel.heightAnchor.constraintEqualToConstant(siteAddressField.frame.height - 10).active = true
-//        siteAddressWPComLabel.widthAnchor.constraintEqualToConstant(siteAddressWPComLabel.frame.width + 10).active = true
-//        siteAddressWPComLabel.rightAnchor.constraintEqualToAnchor(siteAddressField.heightAnchor).active = true
-//        siteAddressField.addSubview(siteAddressWPComLabel)
-
         textFieldsArray.append(siteTitleField)
         textFieldsArray.append(siteAddressField)
         
