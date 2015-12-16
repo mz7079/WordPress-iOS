@@ -54,6 +54,7 @@
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Xmj-DV-EIb">
                             <rect key="frame" x="0.0" y="73" width="600" height="19"/>
+                            <edgeInsets key="layoutMargins" top="20" left="0.0" bottom="20" right="0.0"/>
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VPE-C3-NuX" customClass="WPNUXPrimaryButton">
                             <rect key="frame" x="0.0" y="92" width="600" height="44"/>
@@ -75,7 +76,13 @@
                     </subviews>
                     <constraints>
                         <constraint firstItem="Mtp-p9-DIY" firstAttribute="bottom" secondItem="VPE-C3-NuX" secondAttribute="bottom" id="1Vn-yS-8gR"/>
+                        <constraint firstItem="Xmj-DV-EIb" firstAttribute="top" secondItem="WBQ-TO-XMO" secondAttribute="bottom" constant="20" id="Tbf-uA-AAS"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Tbf-uA-AAS"/>
+                        </mask>
+                    </variation>
                 </stackView>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.52941176469999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
