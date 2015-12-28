@@ -63,6 +63,9 @@
                                 <constraint firstAttribute="height" constant="41" id="QZQ-P8-sfF"/>
                             </constraints>
                             <state key="normal" title="Button"/>
+                            <connections>
+                                <action selector="mainButtonTapped:" destination="-1" eventType="touchUpInside" id="Dht-wH-aRw"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mtp-p9-DIY" customClass="WPNUXSecondaryButton">
                             <rect key="frame" x="0.0" y="164" width="600" height="0.0"/>
