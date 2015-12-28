@@ -19,8 +19,6 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
         var textFieldsArray = [WPWalkthroughTextField]()
         
         let siteTitleField = WPWalkthroughTextField(textWithLeftViewImage: UIImage(named: "icon-pencil"), placeholder: NSLocalizedString("Title", comment: "Title field"), returnKeyType: .Next, delegate: self)
-        siteTitleField.heightAnchor.constraintEqualToConstant(44.0).active = true
-        siteTitleField.widthAnchor.constraintEqualToConstant(320.0).active = true
         
         let siteAddressField = WPWalkthroughTextField(leftViewImage: UIImage(named: "icon-url-field"), rightLabelText: ".wordpress.com", placeholder: NSLocalizedString("Site Address", comment: "Site Address"), returnKeyType: .Done, delegate: self)
         
