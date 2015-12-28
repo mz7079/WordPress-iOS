@@ -94,4 +94,20 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     public override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
+    
+    func areFieldsValid() -> Bool {
+        return areAllTextFieldsFilled()
+    }
+    
+    func areAllTextFieldsFilled() -> Bool {
+        let textFieldsArray = allTextFields()
+        
+        for textField in textFieldsArray {
+            if !textField.hasText() {
+                return false
+            }
+        }
+        
+        return true
+    }
 }
