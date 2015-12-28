@@ -46,6 +46,28 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
         self.navigationController?.presentViewController(supportNavigationController, animated: true, completion: nil)
     }
     
+    @IBAction func mainButtonTapped(sender: AnyObject) {
+        
+    }
+    
+    public func textFieldShouldReturn(textField: UITextField) -> Bool {
+        let textFieldIndex = textField.tag
+        
+        if textFieldIndex == lastTextFieldIndex() {
+            mainButtonTapped(self)
+        } else {
+            let nextResponder = textField.superview?.viewWithTag(textFieldIndex + 1) as UIResponder!
+            nextResponder?.becomeFirstResponder()
+        }
+        
+        return false
+    }
+    
+    func lastTextFieldIndex() -> Int {
+        let textFields = allTextFields()
+        return textFields.count - 1
+    }
+    
     func keyboardDidShow() {
     }
     
@@ -75,7 +97,10 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     
     public func configureTextFields() {
         let textFieldsArray = allTextFields()
-        for textField in textFieldsArray {
+        
+        for var index = 0; index < textFieldsArray.count; ++index {
+            let textField = textFieldsArray[index]
+            textField.tag = index
             textField.heightAnchor.constraintEqualToConstant(44.0).active = true
             textField.widthAnchor.constraintEqualToConstant(320.0).active = true
             textFields.addArrangedSubview(textField)
