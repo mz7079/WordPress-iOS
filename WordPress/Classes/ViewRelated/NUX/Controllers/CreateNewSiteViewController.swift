@@ -15,18 +15,13 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
         return NSLocalizedString("Create a new WordPress.com site", comment: "Create a new WordPress.com site title")
     }
     
-    override internal func allTextFields() -> [WPWalkthroughTextField] {
-        var textFieldsArray = [WPWalkthroughTextField]()
-        
+    override internal func createNewTextFields() {
         let siteTitleField = WPWalkthroughTextField(textWithLeftViewImage: UIImage(named: "icon-pencil"), placeholder: NSLocalizedString("Title", comment: "Title field"), returnKeyType: .Next, delegate: self)
         
         let siteAddressField = WPWalkthroughTextField(leftViewImage: UIImage(named: "icon-url-field"), rightLabelText: ".wordpress.com", placeholder: NSLocalizedString("Site Address", comment: "Site Address"), returnKeyType: .Done, delegate: self)
         
-        
         textFieldsArray.append(siteTitleField)
         textFieldsArray.append(siteAddressField)
-        
-        return textFieldsArray
     }
     
     override func mainButtonString() -> String {

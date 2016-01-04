@@ -83,8 +83,8 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
         return String()
     }
     
-    public func allTextFields() -> [WPWalkthroughTextField] {
-        return [WPWalkthroughTextField]()
+    public func createNewTextFields() {
+        textFieldsArray = [WPWalkthroughTextField]()
     }
     
     public func mainButtonString() -> String {
@@ -101,8 +101,7 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     }
     
     public func configureTextFields() {
-        textFieldsArray = allTextFields()
-        
+        createNewTextFields()
         var index = 0
         
         for textField in textFieldsArray {
