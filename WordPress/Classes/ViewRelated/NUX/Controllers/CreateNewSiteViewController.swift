@@ -15,7 +15,7 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
         return NSLocalizedString("Create a new WordPress.com site", comment: "Create a new WordPress.com site title")
     }
     
-    override func allTextFields() -> [WPWalkthroughTextField] {
+    override internal func allTextFields() -> [WPWalkthroughTextField] {
         var textFieldsArray = [WPWalkthroughTextField]()
         
         let siteTitleField = WPWalkthroughTextField(textWithLeftViewImage: UIImage(named: "icon-pencil"), placeholder: NSLocalizedString("Title", comment: "Title field"), returnKeyType: .Next, delegate: self)

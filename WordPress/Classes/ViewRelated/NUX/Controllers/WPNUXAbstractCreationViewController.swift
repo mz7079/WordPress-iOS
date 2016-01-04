@@ -10,6 +10,7 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     @IBOutlet weak var textFields: UIStackView!
     @IBOutlet weak var mainButton: WPNUXMainButton!
     @IBOutlet weak var mainHelperButton: WPNUXSecondaryButton!
+    var textFieldsArray: [WPWalkthroughTextField] = []
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -28,6 +29,7 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     func registerForKeyboardNotifications() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide", name: UIKeyboardDidHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "textDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
     }
     
     @IBAction func scrollViewTapped(sender: AnyObject) {
@@ -64,14 +66,17 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     }
     
     func lastTextFieldIndex() -> Int {
-        let textFields = allTextFields()
-        return textFields.count - 1
+        return textFieldsArray.count - 1
     }
     
     func keyboardDidShow() {
     }
     
     func keyboardWillHide() {
+    }
+    
+    func textDidChange() {
+        mainButton.enabled = areFieldsValid()
     }
     
     public func titleLabelString() -> String {
@@ -96,14 +101,16 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     }
     
     public func configureTextFields() {
-        let textFieldsArray = allTextFields()
+        textFieldsArray = allTextFields()
         
-        for var index = 0; index < textFieldsArray.count; ++index {
-            let textField = textFieldsArray[index]
+        var index = 0
+        
+        for textField in textFieldsArray {
             textField.tag = index
             textField.heightAnchor.constraintEqualToConstant(44.0).active = true
             textField.widthAnchor.constraintEqualToConstant(320.0).active = true
             textFields.addArrangedSubview(textField)
+            index++
         }
     }
     
@@ -125,9 +132,8 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     }
     
     func areAllTextFieldsFilled() -> Bool {
-        let textFieldsArray = allTextFields()
-        
         for textField in textFieldsArray {
+            let text = textField.text
             if !textField.hasText() {
                 return false
             }
