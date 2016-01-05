@@ -132,7 +132,6 @@ public class WPNUXAbstractCreationViewController: UIViewController, UITextFieldD
     
     func areAllTextFieldsFilled() -> Bool {
         for textField in textFieldsArray {
-            let text = textField.text
             if !textField.hasText() {
                 return false
             }
