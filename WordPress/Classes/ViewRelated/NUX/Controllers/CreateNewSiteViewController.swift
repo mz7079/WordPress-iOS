@@ -4,6 +4,8 @@ import WordPressShared
 class CreateNewSiteViewController: WPNUXAbstractCreationViewController
 {
     let sizePadding: CGFloat = 10
+    let siteTitleIndex = 0
+    let siteAddressIndex = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +24,22 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
         
         textFieldsArray.append(siteTitleField)
         textFieldsArray.append(siteAddressField)
+    }
+    
+    override func textFieldShouldReturn(textField: UITextField) -> Bool {
+        let textFieldIndex = textField.tag
+        let siteAddressTextField = textFieldsArray[siteAddressIndex]
+        if textFieldIndex == siteTitleIndex && !siteAddressTextField.hasText() {
+            let lowerCaseNoSpaceTitle = textField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
+            siteAddressTextField.text = lowerCaseNoSpaceTitle
+            
+            let nextResponder = textField.superview?.viewWithTag(textFieldIndex + 1) as UIResponder!
+            nextResponder?.becomeFirstResponder()
+            
+            return false
+        } else {
+            return super.textFieldShouldReturn(textField)
+        }
     }
     
     override func mainButtonString() -> String {
