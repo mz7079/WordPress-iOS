@@ -57,6 +57,22 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
         mainButton.showActivityIndicator(authenticating)
     }
     
+    func displayRemoteError(error: NSError) {
+        let errorMessage = error.userInfo[WordPressComApiErrorMessageKey] as! String
+        showError(errorMessage)
+    }
+    
+    func showError(message: String) {
+        let overlayView = WPWalkthroughOverlayView(frame: view.bounds)
+        overlayView.overlayTitle = NSLocalizedString("Error", comment: "Error")
+        overlayView.overlayDescription = message
+        overlayView.dismissCompletionBlock = {(overlayView: WPWalkthroughOverlayView!) -> Void in
+            overlayView.dismiss()
+        }
+        
+        view.addSubview(overlayView)
+    }
+    
     func createUserAndSite() {
         guard !isAuthenticating else {
             return
@@ -86,8 +102,9 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
             }
             
             let createBlogFailure: WordPressComServiceFailureBlock = {(error: NSError!) -> Void in
+                self.toggleAuthenticating(false)
                 operation.didFail()
-                
+                self.displayRemoteError(error)
             }
             
             NSLog("\(createBlogSuccess)")

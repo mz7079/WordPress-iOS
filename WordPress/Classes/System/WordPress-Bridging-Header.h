@@ -92,3 +92,4 @@
 #import "SupportViewController.h"
 #import "WPAsyncBlockOperation.h"
 #import "WordPressComServiceRemote.h"
+#import "WPWalkthroughOverlayView.h"
