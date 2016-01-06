@@ -6,6 +6,7 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
     let sizePadding: CGFloat = 10
     let siteTitleIndex = 0
     let siteAddressIndex = 1
+    var isAuthenticating: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
