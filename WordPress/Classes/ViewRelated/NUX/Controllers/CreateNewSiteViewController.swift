@@ -27,6 +27,10 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
         textFieldsArray.append(siteAddressField)
     }
     
+    override func mainButtonTapped(sender: AnyObject) {
+        createUserAndSite()
+    }
+    
     override func textFieldShouldReturn(textField: UITextField) -> Bool {
         let textFieldIndex = textField.tag
         let siteAddressTextField = textFieldsArray[siteAddressIndex]
@@ -45,5 +49,52 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
     
     override func mainButtonString() -> String {
         return NSLocalizedString("Create Account", comment: "Create account button")
+    }
+    
+    func toggleAuthenticating(authenticating: Bool) {
+        isAuthenticating = authenticating
+        mainButton.enabled = !authenticating
+        mainButton.showActivityIndicator(authenticating)
+    }
+    
+    func createUserAndSite() {
+        guard !isAuthenticating else {
+            return
+        }
+        
+        toggleAuthenticating(true)
+        
+        let blogCreation = WPAsyncBlockOperation.operationWithBlock({(operation: WPAsyncBlockOperation!) -> Void in
+            let createBlogSuccess = {(responseDictionary: NSDictionary!) -> Void in
+                operation.didSucceed()
+                
+                let blogOptions: NSMutableDictionary = (responseDictionary["blog_details"]?.mutableCopy())! as! NSMutableDictionary
+                
+                let context = ContextManager.sharedInstance().mainContext
+                let accountService = AccountService(managedObjectContext: context)
+                let blogService = BlogService(managedObjectContext: context)
+                let defaultAccount = accountService.defaultWordPressComAccount()
+                
+                var blog = blogService.findBlogWithXmlrpc(nil, inAccount: defaultAccount)
+                if blog == nil {
+                    blog = blogService.createBlogWithAccount(defaultAccount)
+                    blog.xmlrpc = blogOptions["xmlrpc"] as! String
+                }
+                blog.blogID = blogOptions["blogid"] as! NSNumber
+                blog.url = blogOptions["url"] as! String
+                blog.settings.name = blogOptions["blogname"]!.stringByDecodingXMLCharacters()
+            }
+            
+            let createBlogFailure: WordPressComServiceFailureBlock = {(error: NSError!) -> Void in
+                operation.didFail()
+                
+            }
+            
+            NSLog("\(createBlogSuccess)")
+            NSLog("\(createBlogFailure)")
+        }) as! WPAsyncBlockOperation
+        
+        let operationQueue = NSOperationQueue()
+        operationQueue.addOperation(blogCreation)
     }
 }

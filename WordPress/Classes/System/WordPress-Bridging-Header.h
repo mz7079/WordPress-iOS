@@ -90,3 +90,5 @@
 #import "WPNUXMainButton.h"
 #import <WordPressShared/WPNUXUtility.h>
 #import "SupportViewController.h"
+#import "WPAsyncBlockOperation.h"
+#import "WordPressComServiceRemote.h"
