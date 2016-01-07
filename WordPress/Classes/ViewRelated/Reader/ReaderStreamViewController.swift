@@ -49,6 +49,7 @@ import WordPressComAnalytics
     private var indexPathForGapMarker: NSIndexPath?
     private var needsRefreshCachedCellHeightsBeforeLayout = false
     private var didSetupView = false
+    private var listentingForBlockedSiteNotification = false
 
     private var siteID:NSNumber? {
         didSet {
@@ -180,11 +181,13 @@ import WordPressComAnalytics
 
             let width = view.frame.width
             tableViewHandler.refreshCachedRowHeightsForWidth(width)
-            tableView.reloadRowsAtIndexPaths(tableView.indexPathsForVisibleRows!, withRowAnimation: .None)
+
+            if let indexPaths = tableView.indexPathsForVisibleRows {
+                tableView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: .None)
+            }
         }
     }
 
-    @available(iOS 8.0, *)
     public override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         needsRefreshCachedCellHeightsBeforeLayout = true
@@ -419,7 +422,15 @@ import WordPressComAnalytics
             displayNoResultsView()
         }
 
-        ReaderHelpers.trackLoadedTopic(readerTopic!, withProperties: propertyForStats())
+        if !listentingForBlockedSiteNotification {
+            listentingForBlockedSiteNotification = true
+            NSNotificationCenter.defaultCenter().addObserver(self,
+                selector: "handleBlockSiteNotification:",
+                name: ReaderPostMenu.BlockSiteNotification,
+                object: nil)
+        }
+
+        ReaderHelpers.trackLoadedTopic(readerTopic!, withProperties: topicPropertyForStats())
     }
 
     func configureTitleForTopic() {
@@ -468,7 +479,7 @@ import WordPressComAnalytics
         tableView.setContentOffset(CGPoint.zero, animated: true)
     }
 
-    private func propertyForStats() -> [NSObject: AnyObject] {
+    private func topicPropertyForStats() -> [NSObject: AnyObject] {
         assert(readerTopic != nil, "A reader topic is required")
         let title = readerTopic!.title ?? ""
         var key: String = "list"
@@ -741,6 +752,26 @@ import WordPressComAnalytics
     }
 
 
+    func handleBlockSiteNotification(notification:NSNotification) {
+        guard let userInfo = notification.userInfo, aPost = userInfo["post"] as? ReaderPost else {
+            return
+        }
+
+        do {
+            guard let post = try managedObjectContext().existingObjectWithID(aPost.objectID) as? ReaderPost else {
+                return
+            }
+
+            if let _ = tableViewHandler.resultsController.indexPathForObject(post) {
+                blockSiteForPost(post)
+            }
+
+        } catch let error as NSError {
+            DDLogSwift.logError("Error fetching existing post from context: \(error.localizedDescription)")
+        }
+    }
+
+
     // MARK: - Actions
 
     /**
@@ -939,7 +970,7 @@ import WordPressComAnalytics
             }
         }
 
-        WPAnalytics.track(.ReaderInfiniteScroll, withProperties: propertyForStats())
+        WPAppAnalytics.track(.ReaderInfiniteScroll, withProperties: topicPropertyForStats())
     }
 
     func syncHelper(syncHelper: WPContentSyncHelper, syncContentWithUserInteraction userInteraction: Bool, success: ((hasMore: Bool) -> Void)?, failure: ((error: NSError) -> Void)?) {
@@ -1160,19 +1191,19 @@ import WordPressComAnalytics
             return
         }
 
-        var controller: ReaderPostDetailViewController?
+        var controller: ReaderDetailViewController?
         if post.sourceAttributionStyle() == .Post &&
             post.sourceAttribution.postID != nil &&
             post.sourceAttribution.blogID != nil {
 
-            controller = ReaderPostDetailViewController.detailControllerWithPostID(post.sourceAttribution.postID!, siteID: post.sourceAttribution.blogID!)
+            controller = ReaderDetailViewController.controllerWithPostID(post.sourceAttribution.postID!, siteID: post.sourceAttribution.blogID!)
 
         } else if post.isCrossPost() {
-            controller = ReaderPostDetailViewController.detailControllerWithPostID(post.crossPostMeta.postID, siteID: post.crossPostMeta.siteID)
+            controller = ReaderDetailViewController.controllerWithPostID(post.crossPostMeta.postID, siteID: post.crossPostMeta.siteID)
 
         } else {
             post = postInMainContext(post)!
-            controller = ReaderPostDetailViewController.detailControllerWithPost(post)
+            controller = ReaderDetailViewController.controllerWithPost(post)
         }
 
         navigationController?.pushViewController(controller!, animated: true)
@@ -1260,8 +1291,8 @@ import WordPressComAnalytics
         let controller = ReaderStreamViewController.controllerWithSiteID(post.siteID, isFeed: post.isExternal)
         navigationController?.pushViewController(controller, animated: true)
 
-        let properties = NSDictionary(object: post.blogURL, forKey: "URL") as! [NSObject : AnyObject]
-        WPAnalytics.track(.ReaderSitePreviewed, withProperties: properties)
+        let properties = ReaderHelpers.statsPropertiesForPost(post, andValue: post.blogURL, forKey: "URL")
+        WPAppAnalytics.track(.ReaderSitePreviewed, withProperties: properties)
     }
 
     public func readerCell(cell: ReaderPostCardCell, commentActionForProvider provider: ReaderPostContentProvider) {
@@ -1282,8 +1313,8 @@ import WordPressComAnalytics
         let controller = ReaderStreamViewController.controllerWithTagSlug(post.primaryTagSlug)
         navigationController?.pushViewController(controller, animated: true)
 
-        let properties = NSDictionary(object: post.primaryTagSlug, forKey: "tag") as! [NSObject : AnyObject]
-        WPAnalytics.track(.ReaderTagPreviewed, withProperties: properties)
+        let properties =  ReaderHelpers.statsPropertiesForPost(post, andValue: post.primaryTagSlug, forKey: "tag")
+        WPAppAnalytics.track(.ReaderTagPreviewed, withProperties: properties)
     }
 
     public func readerCell(cell: ReaderPostCardCell, menuActionForProvider provider: ReaderPostContentProvider, fromView sender: UIView) {

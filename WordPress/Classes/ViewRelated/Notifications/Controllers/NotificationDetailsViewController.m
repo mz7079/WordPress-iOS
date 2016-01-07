@@ -16,7 +16,6 @@
 #import "WPWebViewController.h"
 #import "WPImageViewController.h"
 
-#import "ReaderPostDetailViewController.h"
 #import "ReaderCommentsViewController.h"
 #import "StatsViewController.h"
 #import "StatsViewAllTableViewController.h"
@@ -32,7 +31,6 @@
 
 #import "NSURL+Util.h"
 #import "NSScanner+Helpers.h"
-#import "UIActionSheet+Helpers.h"
 #import "NSObject+Helpers.h"
 #import "NSDate+StringFormatting.h"
 #import "NSString+Helpers.h"
@@ -100,61 +98,26 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
     _tableView.dataSource = nil;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.restorationClass = [self class];
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.restorationClass                   = [self class];
-    self.view.backgroundColor               = [WPStyleGuide itsEverywhereGrey];
+    [self setupNavigationBar];
+    [self setupMainView];
+    [self setupTableView];
+    [self setupMediaDownloader];
+    [self setupNotificationListeners];
     
-    // Don't show the notification title in the next-view's back button
-    UIBarButtonItem *backButton             = [[UIBarButtonItem alloc] initWithTitle:[NSString string] style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem   = backButton;
-
-    self.reuseIdentifierMap = @{
-        @(NoteBlockGroupTypeHeader)         : NoteBlockHeaderTableViewCell.reuseIdentifier,
-        @(NoteBlockGroupTypeFooter)         : NoteBlockTextTableViewCell.reuseIdentifier,
-        @(NoteBlockGroupTypeText)           : NoteBlockTextTableViewCell.reuseIdentifier,
-        @(NoteBlockGroupTypeComment)        : NoteBlockCommentTableViewCell.reuseIdentifier,
-        @(NoteBlockGroupTypeActions)        : NoteBlockActionsTableViewCell.reuseIdentifier,
-        @(NoteBlockGroupTypeImage)          : NoteBlockImageTableViewCell.reuseIdentifier,
-        @(NoteBlockGroupTypeUser)           : NoteBlockUserTableViewCell.reuseIdentifier
-    };
-    
-    // Register Cell Nibs
-    NSArray *cellClassNames = @[
-        NSStringFromClass([NoteBlockHeaderTableViewCell class]),
-        NSStringFromClass([NoteBlockTextTableViewCell class]),
-        NSStringFromClass([NoteBlockActionsTableViewCell class]),
-        NSStringFromClass([NoteBlockCommentTableViewCell class]),
-        NSStringFromClass([NoteBlockImageTableViewCell class]),
-        NSStringFromClass([NoteBlockUserTableViewCell class])
-    ];
-    
-    for (NSString *cellClassName in cellClassNames) {
-        Class cellClass                     = NSClassFromString(cellClassName);
-        NSString *className                 = [cellClass classNameWithoutNamespaces];
-        UINib *tableViewCellNib             = [UINib nibWithNibName:className bundle:[NSBundle mainBundle]];
-        
-        [self.tableView registerNib:tableViewCellNib forCellReuseIdentifier:[cellClass reuseIdentifier]];
-        [self.tableView registerNib:tableViewCellNib forCellReuseIdentifier:[cellClass layoutIdentifier]];
-    }
-    
-    // TableView
-    self.tableView.separatorStyle           = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundColor          = [WPStyleGuide itsEverywhereGrey];
-    self.tableView.accessibilityIdentifier  = @"Notification Details Table";
-    self.tableView.backgroundColor          = [WPStyleGuide itsEverywhereGrey];
-    
-    // Media
-    self.mediaDownloader                    = [NotificationMediaDownloader new];
-    
-    NSManagedObjectContext *context = self.note.managedObjectContext;
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleNotificationChange:)
-                                                 name:NSManagedObjectContextObjectsDidChangeNotification
-                                               object:context];
-
     [AppRatingUtility incrementSignificantEventForSection:@"notifications"];
 }
 
@@ -196,9 +159,8 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 {
     // Hide the header, if needed
     NSMutableArray *blockGroups = [NSMutableArray array];
-    BOOL hasHeaderBlocks        = (_note.headerBlockGroup != nil);
     
-    if (hasHeaderBlocks) {
+    if (_note.headerBlockGroup) {
         [blockGroups addObject:_note.headerBlockGroup];
     }
     
@@ -226,6 +188,66 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 }
 
 
+#pragma mark - Setup Helpers
+
+- (void)setupNavigationBar
+{
+    // Don't show the notification title in the next-view's back button
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString string]
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+}
+
+- (void)setupMainView
+{
+    self.view.backgroundColor = [WPStyleGuide itsEverywhereGrey];
+}
+
+- (void)setupTableView
+{
+    // Register Cell Nibs
+    NSArray *cellClassNames = @[
+        NSStringFromClass([NoteBlockHeaderTableViewCell class]),
+        NSStringFromClass([NoteBlockTextTableViewCell class]),
+        NSStringFromClass([NoteBlockActionsTableViewCell class]),
+        NSStringFromClass([NoteBlockCommentTableViewCell class]),
+        NSStringFromClass([NoteBlockImageTableViewCell class]),
+        NSStringFromClass([NoteBlockUserTableViewCell class])
+    ];
+    
+    for (NSString *cellClassName in cellClassNames) {
+        Class cellClass                     = NSClassFromString(cellClassName);
+        NSString *className                 = [cellClass classNameWithoutNamespaces];
+        UINib *tableViewCellNib             = [UINib nibWithNibName:className bundle:[NSBundle mainBundle]];
+        
+        [self.tableView registerNib:tableViewCellNib forCellReuseIdentifier:[cellClass reuseIdentifier]];
+        [self.tableView registerNib:tableViewCellNib forCellReuseIdentifier:[cellClass layoutIdentifier]];
+    }
+    
+    // TableView
+    self.tableView.separatorStyle           = UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor          = [WPStyleGuide greyLighten30];
+    self.tableView.accessibilityIdentifier  = @"Notification Details Table";
+    self.tableView.backgroundColor          = [WPStyleGuide itsEverywhereGrey];
+    self.tableView.keyboardDismissMode      = UIScrollViewKeyboardDismissModeInteractive;
+}
+
+- (void)setupMediaDownloader
+{
+    self.mediaDownloader = [NotificationMediaDownloader new];
+}
+
+- (void)setupNotificationListeners
+{
+    NSManagedObjectContext *context = self.note.managedObjectContext;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotificationChange:)
+                                                 name:NSManagedObjectContextObjectsDidChangeNotification
+                                               object:context];
+}
+
+
 #pragma mark - Autolayout Helpers
 
 - (NSDictionary *)layoutCellMap
@@ -246,6 +268,19 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
     };
     
     return _layoutCellMap;
+}
+
+- (NSDictionary *)reuseIdentifierMap
+{
+    return @{
+        @(NoteBlockGroupTypeHeader)     : NoteBlockHeaderTableViewCell.reuseIdentifier,
+        @(NoteBlockGroupTypeFooter)     : NoteBlockTextTableViewCell.reuseIdentifier,
+        @(NoteBlockGroupTypeText)       : NoteBlockTextTableViewCell.reuseIdentifier,
+        @(NoteBlockGroupTypeComment)    : NoteBlockCommentTableViewCell.reuseIdentifier,
+        @(NoteBlockGroupTypeActions)    : NoteBlockActionsTableViewCell.reuseIdentifier,
+        @(NoteBlockGroupTypeImage)      : NoteBlockImageTableViewCell.reuseIdentifier,
+        @(NoteBlockGroupTypeUser)       : NoteBlockUserTableViewCell.reuseIdentifier
+    };
 }
 
 
@@ -887,7 +922,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
             NotificationsPostIdKey      : postID
         };
         
-        [self performSegueWithIdentifier:NSStringFromClass([ReaderPostDetailViewController class]) sender:parameters];
+        [self performSegueWithIdentifier:[ReaderDetailViewController classNameWithoutNamespaces] sender:parameters];
     }
     return success;
 }
@@ -1010,12 +1045,8 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)followSiteWithBlock:(NotificationBlock *)block
 {
-    NSNumber *metaSiteID = block.metaSiteID;
-    if(metaSiteID) {
-        [WPAnalytics track:WPAnalyticsStatNotificationsSiteFollowAction withProperties:@{ WPAppAnalyticsKeyBlogID:metaSiteID }];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatNotificationsSiteFollowAction];
-    }
+    
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsSiteFollowAction withBlogID:block.metaSiteID];
     
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     ReaderSiteService *service      = [[ReaderSiteService alloc] initWithManagedObjectContext:context];
@@ -1031,12 +1062,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)unfollowSiteWithBlock:(NotificationBlock *)block
 {
-    NSNumber *metaSiteID = block.metaSiteID;
-    if(metaSiteID) {
-        [WPAnalytics track:WPAnalyticsStatNotificationsSiteUnfollowAction withProperties:@{ WPAppAnalyticsKeyBlogID:metaSiteID }];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatNotificationsSiteUnfollowAction];
-    }
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsSiteUnfollowAction withBlogID:block.metaSiteID];
     
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     ReaderSiteService *service      = [[ReaderSiteService alloc] initWithManagedObjectContext:context];
@@ -1052,13 +1078,9 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)likeCommentWithBlock:(NotificationBlock *)block
 {
-    NSNumber *metaSiteID = block.metaSiteID;
-    if(metaSiteID) {
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentLiked withProperties:@{ WPAppAnalyticsKeyBlogID:metaSiteID }];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentLiked];
-    }
 
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentLiked withBlogID:block.metaSiteID];
+    
     // If the associated comment is *not* approved, let's attempt to auto-approve it, automatically
     if (!block.isCommentApproved) {
         [self approveCommentWithBlock:block];
@@ -1079,12 +1101,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)unlikeCommentWithBlock:(NotificationBlock *)block
 {
-    NSNumber *metaSiteID = block.metaSiteID;
-    if(metaSiteID) {
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentUnliked withProperties:@{ WPAppAnalyticsKeyBlogID:metaSiteID }];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentUnliked];
-    }
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentUnliked withBlogID:block.metaSiteID];
     
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     CommentService *service         = [[CommentService alloc] initWithManagedObjectContext:context];
@@ -1100,12 +1117,8 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)approveCommentWithBlock:(NotificationBlock *)block
 {
-    NSNumber *metaSiteID = block.metaSiteID;
-    if(metaSiteID) {
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentApproved withProperties:@{ WPAppAnalyticsKeyBlogID:metaSiteID }];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentApproved];
-    }
+ 
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentApproved withBlogID:block.metaSiteID];
     
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     CommentService *service         = [[CommentService alloc] initWithManagedObjectContext:context];
@@ -1125,13 +1138,8 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
 
 - (void)unapproveCommentWithBlock:(NotificationBlock *)block
 {
-    NSNumber *metaSiteID = block.metaSiteID;
-    if(metaSiteID) {
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentUnapproved withProperties:@{ WPAppAnalyticsKeyBlogID:metaSiteID }];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatNotificationsCommentUnapproved];
-    }
-    
+    [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentUnapproved withBlogID:block.metaSiteID];
+  
     NSManagedObjectContext *context = [[ContextManager sharedInstance] mainContext];
     CommentService *service         = [[CommentService alloc] initWithManagedObjectContext:context];
     __typeof(self) __weak weakSelf  = self;
@@ -1166,12 +1174,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
             onCompletion(NO);
         }];
         
-        NSNumber *metaSiteID = block.metaSiteID;
-        if(metaSiteID) {
-            [WPAnalytics track:WPAnalyticsStatNotificationsCommentFlaggedAsSpam withProperties:@{ WPAppAnalyticsKeyBlogID:metaSiteID }];
-        }else {
-            [WPAnalytics track:WPAnalyticsStatNotificationsCommentFlaggedAsSpam];
-        }
+        [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentFlaggedAsSpam withBlogID:block.metaSiteID];
     };
     
     // Confirmation AlertView
@@ -1209,12 +1212,7 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
             onCompletion(NO);
         }];
         
-        NSNumber *metaSiteID = block.metaSiteID;
-        if(metaSiteID) {
-            [WPAnalytics track:WPAnalyticsStatNotificationsCommentTrashed withProperties:@{ WPAppAnalyticsKeyBlogID:metaSiteID }];
-        }else {
-            [WPAnalytics track:WPAnalyticsStatNotificationsCommentTrashed];
-        }
+        [WPAppAnalytics track:WPAnalyticsStatNotificationsCommentTrashed withBlogID:block.metaSiteID];
     };
     
     // Confirmation AlertView
@@ -1374,14 +1372,14 @@ static NSString *NotificationsCommentIdKey              = @"NotificationsComment
         [commentsViewController setAllowsPushingPostDetails:YES];
         [commentsViewController setupWithPostID:postID siteID:siteID];        
         
-    } else if([segue.identifier isEqualToString:NSStringFromClass([ReaderPostDetailViewController class])]) {
+    } else if([segue.identifier isEqualToString:[ReaderDetailViewController classNameWithoutNamespaces]]) {
         NSParameterAssert([sender isKindOfClass:[NSDictionary class]]);
         
         NSDictionary *parameters                        = (NSDictionary *)sender;
         NSNumber *siteID                                = parameters[NotificationsSiteIdKey];
         NSNumber *postID                                = parameters[NotificationsPostIdKey];
         
-        ReaderPostDetailViewController *readerViewController = segue.destinationViewController;
+        ReaderDetailViewController *readerViewController = segue.destinationViewController;
         [readerViewController setupWithPostID:postID siteID:siteID];
     }
 }

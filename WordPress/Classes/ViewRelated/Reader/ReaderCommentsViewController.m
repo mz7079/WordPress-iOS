@@ -12,7 +12,6 @@
 #import "ReaderPost.h"
 #import "ReaderPostService.h"
 #import "ReaderPostHeaderView.h"
-#import "ReaderPostDetailViewController.h"
 #import "UIView+Subviews.h"
 #import "WPAvatarSource.h"
 #import "WPNoResultsView.h"
@@ -782,14 +781,18 @@ static NSString *CommentLayoutCellIdentifier = @"CommentLayoutCellIdentifier";
 - (void)sendReplyWithNewContent:(NSString *)content
 {
     __typeof(self) __weak weakSelf = self;
+    ReaderPost *post = self.post;
     void (^successBlock)() = ^void() {
-        NSNumber *siteID = self.post.siteID;
-        if(siteID) {
-            [WPAnalytics track:WPAnalyticsStatReaderArticleCommentedOn withProperties:@{ WPAppAnalyticsKeyBlogID:siteID}];
-        }else {
-            [WPAnalytics track:WPAnalyticsStatReaderArticleCommentedOn];
+        NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+        properties[WPAppAnalyticsKeyBlogID] = post.siteID;
+        properties[WPAppAnalyticsKeyPostID] = post.postID;
+        properties[WPAppAnalyticsKeyIsJetpack] = @(post.isJetpack);
+        if (post.feedID && post.feedItemID) {
+            properties[WPAppAnalyticsKeyFeedID] = post.feedID;
+            properties[WPAppAnalyticsKeyFeedItemID] = post.feedItemID;
         }
-        
+        [WPAppAnalytics track:WPAnalyticsStatReaderArticleCommentedOn withProperties:properties];
+
         [weakSelf.tableView deselectSelectedRowWithAnimation:YES];
         [weakSelf refreshReplyTextViewPlaceholder];
     };
@@ -1216,9 +1219,9 @@ static NSString *CommentLayoutCellIdentifier = @"CommentLayoutCellIdentifier";
     }
     
     // Note: Let's manually hide the comments button, in order to prevent recursion in the flow
-    ReaderPostDetailViewController *detailsViewController = [ReaderPostDetailViewController detailControllerWithPost:self.post];
-    [detailsViewController setShouldHideComments:YES];
-    [self.navigationController pushViewController:detailsViewController animated:YES];
+    ReaderDetailViewController *controller = [ReaderDetailViewController controllerWithPost:self.post];
+    controller.shouldHideComments = YES;
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 

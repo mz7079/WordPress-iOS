@@ -1,4 +1,5 @@
 import Foundation
+import WordPressComAnalytics
 import WordPressShared.WPStyleGuide
 import WordPressShared.WPNoResultsView
 
@@ -46,11 +47,14 @@ public enum ThemeType
 public protocol ThemePresenter: class
 {
     var searchType: ThemeType { get set }
+    
+    var screenshotWidth: Int { get }
 
     func currentTheme() -> Theme?
     func activateTheme(theme: Theme?)
 
     func presentCustomizeForTheme(theme: Theme?)
+    func presentPreviewForTheme(theme: Theme?)
     func presentDetailsForTheme(theme: Theme?)
     func presentSupportForTheme(theme: Theme?)
     func presentViewForTheme(theme: Theme?)
@@ -157,6 +161,17 @@ public protocol ThemePresenter: class
     }
     private var presentingTheme: Theme?
    
+    /**
+     *  @brief      Load theme screenshots at maximum displayed width
+     */
+    public var screenshotWidth: Int = {
+        let windowSize = UIApplication.sharedApplication().keyWindow!.bounds.size
+        let vWidth = Styles.imageWidthForFrameWidth(windowSize.width)
+        let hWidth = Styles.imageWidthForFrameWidth(windowSize.height)
+        let maxWidth = Int(max(hWidth, vWidth))
+        return maxWidth
+    }()
+    
     /**
      *  @brief      The themes service we'll use in this VC and its helpers
      */
@@ -372,8 +387,8 @@ public protocol ThemePresenter: class
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThemeBrowserCell.reuseIdentifier, forIndexPath: indexPath) as! ThemeBrowserCell
         
-        cell.theme = themeAtIndex(indexPath.row)
         cell.presenter = self
+        cell.theme = themeAtIndex(indexPath.row)
         
         syncMoreIfNeeded(indexPath.row)
         
@@ -448,6 +463,7 @@ public protocol ThemePresenter: class
     // MARK: - Search support
     
     @IBAction func didTapSearchButton(sender: UIButton) {
+        WPAppAnalytics.track(.ThemesAccessedSearch, withBlog: self.blog)
         beginSearchFor("")
     }
     
@@ -533,6 +549,8 @@ public protocol ThemePresenter: class
         themeService.activateTheme(theme,
             forBlog: blog,
             success: { [weak self] (theme: Theme?) in
+                WPAppAnalytics.track(.ThemesChangedTheme, withProperties: ["themeId": theme?.themeId ?? ""], withBlog: self?.blog)
+
                 self?.collectionView?.reloadData()
                 
                 let successTitle = NSLocalizedString("Theme Activated", comment:"Title of alert when theme activation succeeds")
@@ -565,18 +583,27 @@ public protocol ThemePresenter: class
     }
 
     public func presentCustomizeForTheme(theme: Theme?) {
+        WPAppAnalytics.track(.ThemesCustomizeAccessed, withBlog: self.blog)
         presentUrlForTheme(theme, url: theme?.customizeUrl(), activeButton: false)
     }
 
+    public func presentPreviewForTheme(theme: Theme?) {
+        WPAppAnalytics.track(.ThemesPreviewedSite, withBlog: self.blog)
+        presentUrlForTheme(theme, url: theme?.customizeUrl())
+    }
+    
     public func presentDetailsForTheme(theme: Theme?) {
+        WPAppAnalytics.track(.ThemesDetailsAccessed, withBlog: self.blog)
         presentUrlForTheme(theme, url: theme?.detailsUrl())
     }
     
     public func presentSupportForTheme(theme: Theme?) {
+        WPAppAnalytics.track(.ThemesSupportAccessed, withBlog: self.blog)
         presentUrlForTheme(theme, url: theme?.supportUrl())
     }
     
     public func presentViewForTheme(theme: Theme?) {
+        WPAppAnalytics.track(.ThemesDemoAccessed, withBlog: self.blog)
         presentUrlForTheme(theme, url: theme?.viewUrl())
     }
     

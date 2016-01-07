@@ -13,7 +13,6 @@
 #import "WPAccount.h"
 #import "PostListViewController.h"
 #import "PageListViewController.h"
-#import "WPThemeSettings.h"
 #import "WPGUIConstants.h"
 #import "Wordpress-Swift.h"
 #import "WPAppAnalytics.h"
@@ -59,19 +58,7 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
 @interface BlogDetailsViewController () <UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) BlogDetailHeaderView *headerView;
-@property (nonatomic, weak) UIActionSheet *removeSiteActionSheet;
-@property (nonatomic, weak) UIAlertView *removeSiteAlertView;
 @property (nonatomic, strong) NSArray *tableSections;
-
-/**
- *  @brief      Property to store the themes-enabled state when the VC opens.
- *  @details    The reason it's important to store this in a property as opposed to checking if
- *              themes are enabled in real time, is that this VC is not ready to update the themes
- *              feature visibility if it's changed when this VC is open.  This is not a big problem
- *              though since this feature exists only for testing purposes, but it could still crash
- *              the app if not handled properly.
- */
-@property (nonatomic, assign, readwrite, getter=areThemesEnabled) BOOL themesEnabled;
 
 @end
 
@@ -105,8 +92,6 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
 
 - (void)dealloc
 {
-    self.removeSiteActionSheet.delegate = nil;
-    self.removeSiteAlertView.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -134,8 +119,7 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
                            @(TableViewSectionPublishType)
                           ];
     
-    self.themesEnabled = [WPThemeSettings isEnabled];
-    if (self.themesEnabled && [self.blog supports:BlogFeatureThemeBrowsing]) {
+    if ([self.blog supports:BlogFeatureThemeBrowsing]) {
         self.tableSections = [self.tableSections arrayByAddingObject:@(TableViewSectionAppearance)];
     }
 
@@ -426,12 +410,12 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
             headingTitle = NSLocalizedString(@"Publish", @"Section title for the publish table section in the blog details screen");
         break;
         case TableViewSectionAppearance:
-            headingTitle = NSLocalizedString(@"Appearance",
-                                             @"Section title for the appearance table section in the" \
+            headingTitle = NSLocalizedString(@"Personalize",
+                                             @"Section title for the personalize table section in the" \
                                              " blog details screen.");
         break;
         case TableViewSectionConfigurationType:
-            headingTitle = NSLocalizedString(@"Configuration", @"Section title for the configuration table section in the blog details screen");
+            headingTitle = NSLocalizedString(@"Configure", @"Section title for the configure table section in the blog details screen");
         break;
     }
     return headingTitle;
@@ -441,13 +425,7 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
 
 - (void)showCommentsForBlog:(Blog *)blog
 {
-    NSNumber *dotComID = blog.dotComID;
-    if (dotComID) {
-        [WPAnalytics track:WPAnalyticsStatOpenedComments withProperties:@{WPAppAnalyticsKeyBlogID:dotComID}];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatOpenedComments];
-    }
-    
+    [WPAppAnalytics track:WPAnalyticsStatOpenedComments withBlog:blog];
     CommentsViewController *controller = [[CommentsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     controller.blog = blog;
     [self.navigationController pushViewController:controller animated:YES];
@@ -455,26 +433,14 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
 
 - (void)showPostListForBlog:(Blog *)blog
 {
-    NSNumber *dotComID = blog.dotComID;
-    if(dotComID) {
-        [WPAnalytics track:WPAnalyticsStatOpenedPosts withProperties:@{WPAppAnalyticsKeyBlogID:dotComID}];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatOpenedPosts];
-    }
-    
+    [WPAppAnalytics track:WPAnalyticsStatOpenedPosts withBlog:blog];
     PostListViewController *controller = [PostListViewController controllerWithBlog:blog];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)showPageListForBlog:(Blog *)blog
 {
-    NSNumber *dotComID = blog.dotComID;
-    if(dotComID) {
-        [WPAnalytics track:WPAnalyticsStatOpenedPages withProperties:@{WPAppAnalyticsKeyBlogID:dotComID}];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatOpenedPages];
-    }
-    
+    [WPAppAnalytics track:WPAnalyticsStatOpenedPages withBlog:blog];
     PageListViewController *controller = [PageListViewController controllerWithBlog:blog];
     [self.navigationController pushViewController:controller animated:YES];
 }
@@ -489,26 +455,14 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
 
 - (void)showSettingsForBlog:(Blog *)blog
 {
-    NSNumber *dotComID = blog.dotComID;
-    if(dotComID) {
-        [WPAnalytics track:WPAnalyticsStatOpenedSiteSettings withProperties:@{WPAppAnalyticsKeyBlogID:dotComID}];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatOpenedSiteSettings];
-    }
-    
+    [WPAppAnalytics track:WPAnalyticsStatOpenedSiteSettings withBlog:blog];
     SiteSettingsViewController *controller = [[SiteSettingsViewController alloc] initWithBlog:blog];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)showStatsForBlog:(Blog *)blog
 {
-    NSNumber *dotComID = blog.dotComID;
-    if(dotComID) {
-        [WPAnalytics track:WPAnalyticsStatStatsAccessed withProperties:@{WPAppAnalyticsKeyBlogID:dotComID}];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatStatsAccessed];
-    }
-    
+    [WPAppAnalytics track:WPAnalyticsStatStatsAccessed withBlog:blog];
     StatsViewController *statsView = [StatsViewController new];
     statsView.blog = blog;
     [self.navigationController pushViewController:statsView animated:YES];
@@ -516,13 +470,7 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
 
 - (void)showThemesForBlog:(Blog *)blog
 {
-    NSNumber *dotComID = blog.dotComID;
-    if(dotComID) {
-        [WPAnalytics track:WPAnalyticsStatThemesAccessedThemeBrowser withProperties:@{WPAppAnalyticsKeyBlogID:dotComID}];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatThemesAccessedThemeBrowser];
-    }
-    
+    [WPAppAnalytics track:WPAnalyticsStatThemesAccessedThemeBrowser withBlog:blog];
     ThemeBrowserViewController *viewController = [ThemeBrowserViewController browserWithBlog:blog];
     [self.navigationController pushViewController:viewController
                                          animated:YES];
@@ -530,13 +478,7 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
 
 - (void)showViewSiteForBlog:(Blog *)blog
 {
-    NSNumber *dotComID = blog.dotComID;
-    if(dotComID) {
-        [WPAnalytics track:WPAnalyticsStatOpenedViewSite withProperties:@{WPAppAnalyticsKeyBlogID:dotComID}];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatOpenedViewSite];
-    }
-    
+    [WPAppAnalytics track:WPAnalyticsStatOpenedViewSite withBlog:blog];
     NSURL *targetURL = [NSURL URLWithString:blog.homeURL];
     WPWebViewController *webViewController = [WPWebViewController webViewControllerWithURL:targetURL];
     webViewController.authToken = blog.authToken;
@@ -555,12 +497,7 @@ NSInteger const BlogDetailsRowCountForSectionConfigurationType = 1;
         return;
     }
 
-    NSNumber *dotComID = blog.dotComID;
-    if(dotComID) {
-        [WPAnalytics track:WPAnalyticsStatOpenedViewAdmin withProperties:@{WPAppAnalyticsKeyBlogID:dotComID}];
-    }else {
-        [WPAnalytics track:WPAnalyticsStatOpenedViewAdmin];
-    }
+    [WPAppAnalytics track:WPAnalyticsStatOpenedViewAdmin withBlog:blog];
     
     NSString *dashboardUrl = [blog.xmlrpc stringByReplacingOccurrencesOfString:@"xmlrpc.php" withString:@"wp-admin/"];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:dashboardUrl]];
