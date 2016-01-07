@@ -423,6 +423,7 @@
 		BE45531D1C03D808001FBE16 /* WPNUXAbstractCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE45531B1C03D808001FBE16 /* WPNUXAbstractCreationViewController.swift */; };
 		BE45531E1C03D808001FBE16 /* WPNUXAbstractCreationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE45531C1C03D808001FBE16 /* WPNUXAbstractCreationViewController.xib */; };
 		BE4553201C03E074001FBE16 /* CreateNewSiteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE45531F1C03E074001FBE16 /* CreateNewSiteViewController.swift */; };
+		BE4EB0F31C3EE85C000AF2BD /* CreateAccountAndSiteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4EB0F21C3EE85C000AF2BD /* CreateAccountAndSiteViewController.swift */; };
 		BE8149F71C2128A100DA6486 /* WPNUXNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8149F61C2128A100DA6486 /* WPNUXNavigationController.swift */; };
 		BEBFE86F1B2F50C5002C04EF /* WPSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEBFE86E1B2F50C5002C04EF /* WPSearchController.m */; };
 		BEBFE8721B2F50E0002C04EF /* WPSearchControllerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = BEBFE8711B2F50E0002C04EF /* WPSearchControllerConfigurator.m */; };
@@ -1376,6 +1377,7 @@
 		BE45531B1C03D808001FBE16 /* WPNUXAbstractCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WPNUXAbstractCreationViewController.swift; path = Controllers/WPNUXAbstractCreationViewController.swift; sourceTree = "<group>"; };
 		BE45531C1C03D808001FBE16 /* WPNUXAbstractCreationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WPNUXAbstractCreationViewController.xib; path = Controllers/WPNUXAbstractCreationViewController.xib; sourceTree = "<group>"; };
 		BE45531F1C03E074001FBE16 /* CreateNewSiteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateNewSiteViewController.swift; path = Controllers/CreateNewSiteViewController.swift; sourceTree = "<group>"; };
+		BE4EB0F21C3EE85C000AF2BD /* CreateAccountAndSiteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateAccountAndSiteViewController.swift; path = Controllers/CreateAccountAndSiteViewController.swift; sourceTree = "<group>"; };
 		BE8149F61C2128A100DA6486 /* WPNUXNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WPNUXNavigationController.swift; path = Controllers/WPNUXNavigationController.swift; sourceTree = "<group>"; };
 		BEBFE86D1B2F50C5002C04EF /* WPSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPSearchController.h; path = Search/WPSearchController.h; sourceTree = "<group>"; };
 		BEBFE86E1B2F50C5002C04EF /* WPSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPSearchController.m; path = Search/WPSearchController.m; sourceTree = "<group>"; };
@@ -3201,6 +3203,7 @@
 				BE45531C1C03D808001FBE16 /* WPNUXAbstractCreationViewController.xib */,
 				BE45531F1C03E074001FBE16 /* CreateNewSiteViewController.swift */,
 				BE8149F61C2128A100DA6486 /* WPNUXNavigationController.swift */,
+				BE4EB0F21C3EE85C000AF2BD /* CreateAccountAndSiteViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -4730,6 +4733,7 @@
 				E1EBC36F1C118EA500F638E0 /* ImmuTable.swift in Sources */,
 				5DDC44671A72BB07007F538E /* ReaderViewController.m in Sources */,
 				E1D086E2194214C600F0CC19 /* NSDate+WordPressJSON.m in Sources */,
+				BE4EB0F31C3EE85C000AF2BD /* CreateAccountAndSiteViewController.swift in Sources */,
 				5D839AAB187F0D8000811F4A /* PostGeolocationCell.m in Sources */,
 				5D732F971AE84E3C00CD89E7 /* PostListFooterView.m in Sources */,
 				A2DC5B1A1953451B009584C3 /* WPNUXHelpBadgeLabel.m in Sources */,
