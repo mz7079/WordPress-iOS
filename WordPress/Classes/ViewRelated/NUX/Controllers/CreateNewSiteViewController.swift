@@ -57,6 +57,13 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
         mainButton.showActivityIndicator(authenticating)
     }
     
+    func siteAddressWithoutWordPressDotCom() -> String {
+        let siteAddressTextField = textFieldsArray[siteAddressIndex]
+        let dotComRegularExpression = NSRegularExpression(pattern: "\\.wordpress\\.com/?$", options: .CaseInsensitive)
+        
+        return dotComRegularExpression.stringByReplacingMatchesInString(siteAddressTextField.text, options: .RawValue, range: siteAddressTextField.text.length, withTemplate: "")
+    }
+    
     func displayRemoteError(error: NSError) {
         let errorMessage = error.userInfo[WordPressComApiErrorMessageKey] as! String
         showError(errorMessage)
