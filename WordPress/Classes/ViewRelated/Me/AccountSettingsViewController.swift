@@ -14,7 +14,7 @@ class AccountSettingsController: NSObject, SettingsController {
         viewController.title = title
         viewController.handler.registerRows(immutableRows)
         _ = viewModel
-            .observeOn(MainScheduler.sharedInstance)
+            .observeOn(MainScheduler.instance)
             .takeUntil(viewController.rx_deallocated)
             .subscribeNext(viewController.bindViewModel)
     }
