@@ -16,6 +16,9 @@ class MyProfileController: NSObject, SettingsController {
             .observeOn(MainScheduler.instance)
             .takeUntil(viewController.rx_deallocated)
             .subscribeNext(viewController.bindViewModel)
+        _ = refresh.subscribeNext {
+            service.refreshSettings({ _ in })
+        }
     }
 
     convenience init(account: WPAccount) {

@@ -20,6 +20,7 @@ protocol SettingsController: AnyObject {
     var title: String { get }
     var viewModel: Observable<ImmuTable> { get }
     var service: AccountSettingsService { get }
+    var viewController: SettingsViewController { get }
 }
 
 // Actions
@@ -27,6 +28,10 @@ protocol SettingsController: AnyObject {
 typealias ImmuTableRowControllerGenerator = ImmuTableRow -> UIViewController
 
 extension SettingsController {
+    var refresh: Observable<Void> {
+        return viewController.willAppear
+    }
+
     func editText(changeType: (AccountSettingsChangeWithString), hint: String? = nil) -> ImmuTableRowControllerGenerator {
         return { [unowned self] row in
             let row = row as! EditableTextRow
@@ -63,6 +68,11 @@ class SettingsViewController: UITableViewController, SettingsPresenter {
         return ImmuTableViewHandler(takeOver: self)
     }()
 
+    let willAppear: Observable<Void> = PublishSubject()
+    private var willAppearSubject: PublishSubject<Void> {
+        return willAppear as! PublishSubject<Void>
+    }
+
     // MARK: - Table View Controller
 
     init() {
@@ -78,6 +88,11 @@ class SettingsViewController: UITableViewController, SettingsPresenter {
 
         WPStyleGuide.resetReadableMarginsForTableView(tableView)
         WPStyleGuide.configureColorsForView(view, andTableView: tableView)
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        willAppearSubject.onNext()
     }
 
     func bindViewModel(viewModel: ImmuTable) {
