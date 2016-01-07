@@ -32,11 +32,9 @@ class AccountSettingsController: NSObject, SettingsController {
             title: NSLocalizedString("Username", comment: "Account Settings Username label"),
             value: settings?.username ?? "")
 
-        let email = EditableTextRow(
+        let email = TextRow(
             title: NSLocalizedString("Email", comment: "Account Settings Email label"),
-            value: settings?.email ?? "",
-            action: viewController.push(editEmail())
-        )
+            value: settings?.email ?? "")
 
         let webAddress = EditableTextRow(
             title: NSLocalizedString("Web Address", comment: "Account Settings Web Address label"),
@@ -86,10 +84,6 @@ class AccountSettingsController: NSObject, SettingsController {
     }
 
     // MARK: - Actions
-
-    func editEmail() -> ImmuTableRowControllerGenerator {
-        return editText(AccountSettingsChange.Email, hint: NSLocalizedString("Will not be publicly displayed", comment: "Help text when editing email"))
-    }
 
     func editWebAddress() -> ImmuTableRowControllerGenerator {
         return editText(AccountSettingsChange.WebAddress, hint: NSLocalizedString("Shown publicly when you comment on blogs.", comment: "Help text when editing web address"))
