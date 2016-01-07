@@ -48,7 +48,7 @@ class CreateNewSiteViewController: WPNUXAbstractCreationViewController
     }
     
     override func mainButtonString() -> String {
-        return NSLocalizedString("Create Account", comment: "Create account button")
+        return NSLocalizedString("Create Site", comment: "Create site button")
     }
     
     func toggleAuthenticating(authenticating: Bool) {
