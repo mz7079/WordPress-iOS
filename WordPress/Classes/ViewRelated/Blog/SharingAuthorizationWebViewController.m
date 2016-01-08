@@ -71,22 +71,6 @@ static NSString * const SharingAuthorizationAccessDenied = @"error=access_denied
 }
 
 
-#pragma mark = Lifecycle Methods
-
-- (void)dealloc
-{
-    [[WordPressAppDelegate sharedInstance].userAgent useWordPressUserAgent];
-}
-
-- (void)viewDidLoad
-{
-    // some services require Safari user agent to log in
-    [[WordPressAppDelegate sharedInstance].userAgent useDefaultUserAgent];
-
-    [super viewDidLoad];
-}
-
-
 #pragma mark - Instance Methods
 
 - (IBAction)dismiss

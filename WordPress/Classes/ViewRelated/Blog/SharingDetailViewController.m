@@ -3,10 +3,9 @@
 #import "BlogService.h"
 #import "SVProgressHUD.h"
 #import "SharingAuthorizationWebViewController.h"
-#import "UIActionSheet+Helpers.h"
 #import "UIImageView+AFNetworkingExtra.h"
 #import "WPTableViewCell.h"
-#import "WPTableViewSectionHeaderFooterView.h"
+#import <WordPressShared/WPTableViewSectionHeaderFooterView.h>
 
 #import "WordPress-Swift.h"
 
@@ -150,7 +149,7 @@ static NSString *const PublicizeCellIdentifier = @"PublicizeCell";
 {
     PublicizeConnection *pubConn = [self connectionForService:self.publicizeService];
 
-    __weak __typeof__(self) weakSelf = self;
+//    __weak __typeof__(self) weakSelf = self;
 
     SharingService *sharingService = [[SharingService alloc] initWithManagedObjectContext:[self managedObjectContext]];
     [sharingService deletePublicizeConnection:pubConn success:^{
@@ -283,7 +282,7 @@ static NSString *const PublicizeCellIdentifier = @"PublicizeCell";
     NSParameterAssert([[keyringConnections firstObject] isKindOfClass:[KeyringConnection class]]);
     NSParameterAssert(pubServ);
 
-    __weak __typeof__(self) weakSelf = self;
+//    __weak __typeof__(self) weakSelf = self;
     NSMutableArray *accountNames = [NSMutableArray array];
     for (KeyringConnection *keyConn in keyringConnections) {
         [accountNames addObject:keyConn.externalDisplay];
@@ -292,20 +291,20 @@ static NSString *const PublicizeCellIdentifier = @"PublicizeCell";
     // TODO: Switch to UIAlertController
     // NOTE: Currently, implementation assumes account names will be different, but they could be the same.
     // We'll have better handling with UIAlertController. For now this works as a tester/demo
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Connect account:", @"Title of Publicize account selection")
-                                                     cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel")
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:accountNames
-                                                           completion:^(NSString *buttonTitle){
-                                                               __typeof__(self) strongSelf = weakSelf;
-                                                               if (!strongSelf) {
-                                                                   return;
-                                                               }
-                                                               [strongSelf handleSelectedAccountWithName:buttonTitle
-                                                                                                    from:keyringConnections
-                                                                                           forPublicizer:pubServ];
-                                                           }];
-    [actionSheet showInView:self.view];
+//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Connect account:", @"Title of Publicize account selection")
+//                                                     cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel")
+//                                               destructiveButtonTitle:nil
+//                                                    otherButtonTitles:accountNames
+//                                                           completion:^(NSString *buttonTitle){
+//                                                               __typeof__(self) strongSelf = weakSelf;
+//                                                               if (!strongSelf) {
+//                                                                   return;
+//                                                               }
+//                                                               [strongSelf handleSelectedAccountWithName:buttonTitle
+//                                                                                                    from:keyringConnections
+//                                                                                           forPublicizer:pubServ];
+//                                                           }];
+//    [actionSheet showInView:self.view];
 
 }
 
@@ -327,7 +326,7 @@ static NSString *const PublicizeCellIdentifier = @"PublicizeCell";
 
 - (void)connectToPublicizeService:(PublicizeService *)pubServ withKeyringConnection:(KeyringConnection *)keyConn
 {
-    __weak __typeof__(self) weakSelf = self;
+//    __weak __typeof__(self) weakSelf = self;
     SharingService *sharingService = [[SharingService alloc] initWithManagedObjectContext:[self managedObjectContext]];
     [sharingService createPublicizeConnectionForBlog:self.blog
                                              keyring:keyConn
