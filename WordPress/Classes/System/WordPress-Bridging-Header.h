@@ -8,6 +8,7 @@
 
 #import "Blog.h"
 #import "BlogService.h"
+#import "CommentService.h"
 
 #import "Constants.h"
 #import "ContextManager.h"
@@ -47,6 +48,8 @@
 #import "ReaderTopicService.h"
 #import "RemoteReaderTopic.h"
 
+#import "RotationAwareNavigationViewController.h"
+
 #import "ServiceRemoteREST.h"
 #import "SettingsSelectionViewController.h"
 #import "SettingsMultiTextViewController.h"
@@ -85,5 +88,7 @@
 #import "WPUserAgent.h"
 #import "WPWebViewController.h"
 #import "WPTabBarController.h"
+#import "WPSearchController.h"
+#import "WPSearchControllerConfigurator.h"
 
 #import <WordPressShared/WPTableViewSectionHeaderFooterView.h>
