@@ -2,8 +2,6 @@ import Foundation
 import WordPressShared
 import WordPressComAnalytics
 
-// TODO: Share button?  Other feedback
-// TODO: Make sure that changes to analytics in the old VC are applied here
 
 final public class ReaderDetailViewController : UIViewController
 {
@@ -438,7 +436,7 @@ final public class ReaderDetailViewController : UIViewController
 
     private func configureByLine() {
         // Avatar
-        let placeholder = UIImage(named: "gravatar-reader")
+        let placeholder = UIImage(named: "gravatar")
         if let url = NSURL(string: post!.authorAvatarURL) {
             avatarImageView.setImageWithURL(url, placeholderImage: placeholder)
         }
