@@ -38,6 +38,7 @@ NSString * const PostFormatStandard = @"standard";
 @dynamic hasOlderPages;
 @dynamic posts;
 @dynamic categories;
+@dynamic tags;
 @dynamic comments;
 @dynamic connections;
 @dynamic themes;
@@ -62,7 +63,7 @@ NSString * const PostFormatStandard = @"standard";
 @dynamic icon;
 @dynamic username;
 @dynamic settings;
-
+@dynamic planID;
 
 @synthesize api = _api;
 @synthesize isSyncingPosts;
@@ -419,19 +420,25 @@ NSString * const PostFormatStandard = @"standard";
              If the logic for this changes that needs to be updated as well
              */
             return [self accountIsDefaultAccount];
+        case BlogFeaturePeople:
         case BlogFeatureWPComRESTAPI:
             return [self restApi] != nil;
+        case BlogFeatureSharing:
+            return [self restApi] && self.usernameForSite && self.isAdmin;
         case BlogFeatureStats:
             return [self restApiForStats] != nil;
         case BlogFeatureCommentLikes:
         case BlogFeatureReblog:
         case BlogFeatureMentions:
         case BlogFeatureOAuth2Login:
+        case BlogFeaturePlans:
             return [self isHostedAtWPcom];
         case BlogFeaturePushNotifications:
             return [self supportsPushNotifications];
         case BlogFeatureThemeBrowsing:
             return [self isHostedAtWPcom] && [self isAdmin];
+        case BlogFeatureSiteManagement:
+            return [self supportsSiteManagementServices];
     }
 }
 
