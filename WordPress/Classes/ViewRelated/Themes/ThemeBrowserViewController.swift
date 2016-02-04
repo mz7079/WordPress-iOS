@@ -109,7 +109,7 @@ public protocol ThemePresenter: class
     
     private var searchName = "" {
         didSet {
-            if searchName != oldValue {
+            if searchName.trim() != oldValue.trim() {
                 fetchThemes()
                 reloadThemes()
             }
@@ -609,11 +609,12 @@ public protocol ThemePresenter: class
     // MARK: - NSFetchedResultsController helpers
 
     private func searchNamePredicate() -> NSPredicate? {
-        guard !searchName.isEmpty else {
+        let pattern = searchName.trim()
+        guard !pattern.isEmpty else {
             return nil
         }
         
-        return NSPredicate(format: "name contains[c] %@", searchName)
+        return NSPredicate(format: "name contains[c] %@", pattern)
     }
     
     private func browsePredicate() -> NSPredicate? {
