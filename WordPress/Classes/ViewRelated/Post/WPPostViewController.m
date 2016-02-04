@@ -1556,19 +1556,41 @@ EditImageDetailsViewControllerDelegate
  */
 - (void)autosaveContent
 {
-    self.post.postTitle = self.titleText;
+    __block NSString *contentText;
+    __block NSString *titleText;
     
-    self.post.content = self.bodyText;
-    if ([self.post.content rangeOfString:@"<!--more-->"].location != NSNotFound)
-        self.post.mt_text_more = @"";
-    
-    if ( self.post.original.password != nil ) { //original post was password protected
-        if ( self.post.password == nil || [self.post.password isEqualToString:@""] ) { //removed the password
-            self.post.password = @"";
+    void(^privateFunc)() = ^void() {
+        
+        self.post.postTitle = titleText;
+        self.post.content = contentText;
+        
+        if ([self.post.content rangeOfString:@"<!--more-->"].location != NSNotFound)
+            self.post.mt_text_more = @"";
+        
+        if ( self.post.original.password != nil ) { //original post was password protected
+            if ( self.post.password == nil || [self.post.password isEqualToString:@""] ) { //removed the password
+                self.post.password = @"";
+            }
         }
-    }
+        
+        [self.post save];
+    };
     
-    [self.post save];
+    [self titleText:^void(NSString *text, NSError *error) {
+        titleText = text;
+        
+        if (contentText) {
+            privateFunc();
+        }
+    }];
+    
+    [self bodyText:^void(NSString *text, NSError *error) {
+        contentText = text;
+        
+        if (titleText) {
+            privateFunc();
+        }
+    }];
 }
 
 #pragma mark - Media State Methods
